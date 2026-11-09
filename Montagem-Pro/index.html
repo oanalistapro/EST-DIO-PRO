@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e1b">
+<title>ESTÚDIO PRO — Montagem PRO</title>
+<style>
+:root{color-scheme:dark;--bg:#080e1b;--panel:#121e32;--card:#1b2c47;--line:#304663;--blue:#388bff;--muted:#a9bad3;--green:#07866b}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:#f5f8ff;font-family:Arial,system-ui,sans-serif}
+button,input,select{font:inherit}
+button{background:var(--card);color:white;border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer}
+button:hover{filter:brightness(1.15)}
+input[type=number],input[type=text],select{background:#0b1628;color:white;border:1px solid var(--line);border-radius:8px;padding:9px;width:100%}
+input[type=range]{width:100%;accent-color:var(--blue)}
+input[type=color]{width:100%;height:40px}
+input[type=file]{display:none}
+a{color:#b5d5ff}
+.primary{background:var(--blue);border-color:var(--blue);font-weight:bold}
+.success{background:var(--green)}
+.danger{background:#75323e}
+.full{width:100%}
+header{padding:14px 2%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:#101b2d;border-bottom:1px solid var(--line)}
+.logo{font-size:21px;font-weight:900}.logo span{color:var(--blue)}
+main{max-width:1800px;margin:auto;padding:12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr) 250px;gap:11px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0}
+h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:17px 0 9px}
+.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.control{margin:12px 0}.control label{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin-bottom:6px}
+.stage{background:#070c15;min-height:470px;border-radius:11px;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px}
+#canvas{display:block;max-width:100%;max-height:70vh;width:auto;height:auto;box-shadow:0 8px 35px #0009;touch-action:none}
+.thumb{display:flex;gap:8px;align-items:center;border:1px solid var(--line);padding:7px;border-radius:9px;margin:6px 0}
+.thumb img{width:45px;height:45px;object-fit:cover;border-radius:6px}
+.thumb span{font-size:12px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.thumb button{padding:5px}
+.status{background:#123647;border:1px solid #2b5b70;color:#c4f4e9;border-radius:9px;padding:11px;margin-top:11px;font-size:12px}
+@media(max-width:1100px){.layout{grid-template-columns:250px minmax(0,1fr)}.right{grid-column:1/-1}}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.right{grid-column:auto}.stage{min-height:300px}header .logo{font-size:17px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦ ESTÚDIO <span>PRO</span> / MONTAGEM</div>
+ <a href="../index.html">← Início</a>
+</header>
+<main>
+<div class="toolbar">
+ <button class="primary" onclick="choosePhotos()">＋ Adicionar fotos</button>
+ <button onclick="newProject()">Novo projeto</button>
+ <button onclick="undo()">↶ Desfazer</button>
+ <button onclick="redo()">↷ Refazer</button>
+ <button onclick="saveProject()">💾 Salvar projeto</button>
+ <button onclick="openProject()">📂 Abrir projeto</button>
+ <button class="success" onclick="exportImage()">⬇ Exportar</button>
+</div>
+<div class="layout">
+<aside class="panel">
+ <h2>Montagem profissional</h2>
+ <button class="primary full" onclick="choosePhotos()">Importar fotos</button>
+ <h3>Tipo de montagem</h3>
+ <select id="layoutType" onchange="render()">
+  <option value="grid">Grade organizada</option>
+  <option value="horizontal">Faixa horizontal</option>
+  <option value="vertical">Faixa vertical</option>
+  <option value="featured">Foto principal + menores</option>
+  <option value="free">Posicionamento livre</option>
+ </select>
+ <h3>Colunas</h3>
+ <select id="columns" onchange="render()">
+  <option value="1">1 coluna</option>
+  <option value="2" selected>2 colunas</option>
+  <option value="3">3 colunas</option>
+  <option value="4">4 colunas</option>
+  <option value="5">5 colunas</option>
+  <option value="6">6 colunas</option>
+ </select>
+ <h3>Formato</h3>
+ <select id="size" onchange="render()">
+  <option value="1080x1080">Quadrado 1080×1080</option>
+  <option value="1080x1920">Story 1080×1920</option>
+  <option value="1920x1080">Horizontal Full HD</option>
+  <option value="2480x3508">A4 300 DPI</option>
+  <option value="3840x2160">4K</option>
+  <option value="7680x4320">8K</option>
+ </select>
+ <h3>Espaçamento</h3>
+ <input id="gap" type="range" min="0" max="100" value="15" oninput="render()">
+ <h3>Margens</h3>
+ <input id="margin" type="range" min="0" max="150" value="25" oninput="render()">
+ <h3>Arredondamento</h3>
+ <input id="radius" type="range" min="0" max="100" value="15" oninput="render()">
+ <h3>Fundo</h3>
+ <input id="bg" type="color" value="#ffffff" oninput="render()">
+ <h3>Texto da montagem</h3>
+ <input id="caption" type="text" placeholder="Título ou legenda" oninput="render()">
+ <div class="control"><label>Cor do texto</label><input id="captionColor" type="color" value="#ffffff" oninput="render()"></div>
+ <button class="primary full" onclick="render()">Atualizar montagem</button>
+</aside>
+<section class="panel">
+ <div class="stage"><canvas id="canvas" width="1080" height="1080"></canvas></div>
+ <div class="status" id="status" role="status">Adicione fotos para criar sua montagem.</div>
+ <p class="muted" id="info">Nenhuma foto carregada.</p>
+</section>
+<aside class="panel right">
+ <h2>Fotos do projeto</h2>
+ <div id="photoList"></div>
+ <h3>Foto selecionada</h3>
+ <p class="muted">No modo livre, arraste as fotos para mudar a posição.</p>
+ <div class="two">
+  <button onclick="movePhoto(-1)">↑ Subir</button>
+  <button onclick="movePhoto(1)">↓ Descer</button>
+  <button onclick="duplicatePhoto()">Duplicar</button>
+  <button class="danger" onclick="deletePhoto()">Excluir</button>
+ </div>
+ <h3>Exportação</h3>
+ <select id="exportFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+  <option value="image/webp">WEBP</option>
+ </select>
+ <button class="success full" style="margin-top:8px" onclick="exportImage()">Baixar montagem</button>
+ <p class="muted">Resoluções altas dependem da memória do celular ou computador.</p>
+</aside>
+</div>
+<input id="photoInput" type="file" accept="image/*" multiple>
+<input id="projectInput" type="file" accept=".json,application/json">
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const canvas=$("canvas"),ctx=canvas.getContext("2d");
+let photos=[],selected=-1,history=[],future=[],dragging=false,dragStart=null;
+let nextId=1;
+function msg(t){$("status").textContent=t}
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function settings(){
+ return {
+  layout:$("layoutType").value,columns:$("columns").value,
+  size:$("size").value,gap:$("gap").value,
+  margin:$("margin").value,radius:$("radius").value,
+  bg:$("bg").value,caption:$("caption").value,
+  captionColor:$("captionColor").value
+ };
+}
+function state(){return {photos:photos.map(p=>({id:p.id,name:p.name,src:p.src,x:p.x,y:p.y,w:p.w,h:p.h})),settings:settings()}}
+function snapshot(){
+ history.push(state());if(history.length>25)history.shift();future=[];
+}
+async function restore(s){
+ photos=await Promise.all(s.photos.map(async p=>({...p,img:await loadImage(p.src)})));
+ const z=s.settings;
+ $("layoutType").value=z.layout;$("columns").value=z.columns;
+ $("size").value=z.size;$("gap").value=z.gap;
+ $("margin").value=z.margin;$("radius").value=z.radius;
+ $("bg").value=z.bg;$("caption").value=z.caption;
+ $("captionColor").value=z.captionColor;
+ selected=-1;render();
+}
+async function undo(){
+ if(!history.length)return msg("Nada para desfazer.");
+ future.push(state());await restore(history.pop());msg("Desfeito.");
+}
+async function redo(){
+ if(!future.length)return msg("Nada para refazer.");
+ history.push(state());await restore(future.pop());msg("Refeito.");
+}
+function loadImage(src){
+ return new Promise((resolve,reject)=>{
+  const im=new Image();im.onload=()=>resolve(im);
+  im.onerror=()=>reject(Error("Imagem inválida"));im.src=src;
+ });
+}
+function choosePhotos(){
+ $("photoInput").value="";$("photoInput").click();
+}
+$("photoInput").onchange=async e=>{
+ snapshot();
+ for(const f of e.target.files){
+  if(!f.type.startsWith("image/"))continue;
+  try{
+   const src=await new Promise((resolve,reject)=>{
+    const r=new FileReader();r.onload=()=>resolve(r.result);
+    r.onerror=reject;r.readAsDataURL(f);
+   });
+   const img=await loadImage(src);
+   photos.push({id:nextId++,name:f.name,src,img,x:100,y:100,w:350,h:350});
+  }catch(err){msg("Falha ao carregar "+f.name)}
+ }
+ render();msg(photos.length+" fotos no projeto.");
+};
+function roundedRect(x,y,w,h,r){
+ r=Math.max(0,Math.min(r,w/2,h/2));
+ ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.clip();
+}
+function drawPhoto(p,x,y,w,h,r){
+ ctx.save();roundedRect(x,y,w,h,r);
+ const iw=p.img.width,ih=p.img.height;
+ const scale=Math.max(w/iw,h/ih);
+ const sw=w/scale,sh=h/scale;
+ ctx.drawImage(p.img,(iw-sw)/2,(ih-sh)/2,sw,sh,x,y,w,h);
+ ctx.restore();
+}
+function render(){
+ const [W,H]=$("size").value.split("x").map(Number);
+ canvas.width=W;canvas.height=H;
+ ctx.fillStyle=$("bg").value;ctx.fillRect(0,0,W,H);
+ const gap=+$("gap").value,margin=+$("margin").value;
+ const radius=+$("radius").value;
+ const type=$("layoutType").value;
+ const n=photos.length;
+ if(n){
+  if(type==="free"){
+   photos.forEach(p=>drawPhoto(p,p.x,p.y,p.w,p.h,radius));
+  }else if(type==="featured"&&n>1){
+   const bigW=W*.62-margin*1.5;
+   drawPhoto(photos[0],margin,margin,bigW,H-margin*2,radius);
+   const rest=n-1,cols=rest>4?2:1,rows=Math.ceil(rest/cols);
+   const x=margin+bigW+gap;
+   const area=W-x-margin;
+   const cw=(area-gap*(cols-1))/cols;
+   const ch=(H-margin*2-gap*(rows-1))/rows;
+   photos.slice(1).forEach((p,i)=>{
+    drawPhoto(p,x+(i%cols)*(cw+gap),
+     margin+Math.floor(i/cols)*(ch+gap),cw,ch,radius);
+   });
+  }else{
+   let cols=+$("columns").value;
+   if(type==="horizontal")cols=n;
+   if(type==="vertical")cols=1;
+   cols=Math.max(1,Math.min(cols,n));
+   const rows=Math.ceil(n/cols);
+   const cw=(W-margin*2-gap*(cols-1))/cols;
+   const ch=(H-margin*2-gap*(rows-1))/rows;
+   photos.forEach((p,i)=>{
+    drawPhoto(p,margin+(i%cols)*(cw+gap),
+     margin+Math.floor(i/cols)*(ch+gap),cw,ch,radius);
+   });
+  }
+ }
+ const title=$("caption").value.trim();
+ if(title){
+  const font=Math.max(22,Math.round(W/22));
+  ctx.font=`bold ${font}px Arial`;
+  ctx.textAlign="center";ctx.textBaseline="bottom";
+  ctx.lineWidth=Math.max(3,font/10);
+  ctx.strokeStyle="#000";
+  ctx.fillStyle=$("captionColor").value;
+  ctx.strokeText(title,W/2,H-35,W*.9);
+  ctx.fillText(title,W/2,H-35,W*.9);
+ }
+ $("info").textContent=n+" fotos • "+W+" × "+H+" pixels";
+ renderList();
+}
+function renderList(){
+ $("photoList").replaceChildren();
+ photos.forEach((p,i)=>{
+  const row=document.createElement("div");row.className="thumb";
+  if(i===selected)row.style.borderColor="#388bff";
+  const img=document.createElement("img");img.src=p.src;
+  const name=document.createElement("span");name.textContent=p.name;
+  const btn=document.createElement("button");btn.textContent="Selecionar";
+  btn.onclick=()=>{selected=i;renderList()};
+  row.append(img,name,btn);$("photoList").appendChild(row);
+ });
+}
+function movePhoto(d){
+ if(selected<0)return;
+ const j=selected+d;if(j<0||j>=photos.length)return;
+ snapshot();[photos[selected],photos[j]]=[photos[j],photos[selected]];
+ selected=j;render();
+}
+function duplicatePhoto(){
+ if(selected<0)return;
+ snapshot();
+ const p=photos[selected];
+ photos.push({...p,id:nextId++,x:p.x+30,y:p.y+30});
+ selected=photos.length-1;render();
+}
+function deletePhoto(){
+ if(selected<0)return;
+ snapshot();photos.splice(selected,1);selected=-1;render();
+}
+function point(e){
+ const r=canvas.getBoundingClientRect();
+ return {x:(e.clientX-r.left)*canvas.width/r.width,
+ y:(e.clientY-r.top)*canvas.height/r.height};
+}
+canvas.addEventListener("pointerdown",e=>{
+ if($("layoutType").value!=="free")return;
+ const p=point(e);
+ selected=-1;
+ for(let i=photos.length-1;i>=0;i--){
+  const q=photos[i];
+  if(p.x>=q.x&&p.x<=q.x+q.w&&p.y>=q.y&&p.y<=q.y+q.h){
+   selected=i;break;
+  }
+ }
+ if(selected<0)return;
+ snapshot();dragging=true;
+ dragStart={x:p.x,y:p.y,px:photos[selected].x,py:photos[selected].y};
+ canvas.setPointerCapture(e.pointerId);
+ renderList();
+});
+canvas.addEventListener("pointermove",e=>{
+ if(!dragging||selected<0)return;
+ const p=point(e),q=photos[selected];
+ q.x=dragStart.px+p.x-dragStart.x;
+ q.y=dragStart.py+p.y-dragStart.y;
+ render();
+});
+canvas.addEventListener("pointerup",()=>dragging=false);
+canvas.addEventListener("pointercancel",()=>dragging=false);
+function newProject(){
+ if(!confirm("Criar novo projeto? Alterações não salvas serão perdidas."))return;
+ snapshot();photos=[];selected=-1;render();msg("Novo projeto.");
+}
+function download(blob,name){
+ if(!blob)return msg("Não foi possível gerar arquivo.");
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");a.href=url;a.download=name;
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function saveProject(){
+ const blob=new Blob([JSON.stringify({version:1,...state()})],
+  {type:"application/json"});
+ download(blob,"estudio-pro-montagem.json");
+ msg("Projeto salvo em JSON.");
+}
+function openProject(){
+ $("projectInput").value="";$("projectInput").click();
+}
+$("projectInput").onchange=async e=>{
+ try{
+  const f=e.target.files[0];if(!f)return;
+  const data=JSON.parse(await f.text());
+  if(!Array.isArray(data.photos)||!data.settings)
+   throw Error("Projeto inválido.");
+  snapshot();await restore(data);
+  msg("Projeto restaurado.");
+ }catch(err){msg("Falha: "+err.message)}
+};
+async function exportImage(){
+ try{
+  render();
+  const type=$("exportFormat").value;
+  const blob=await new Promise(r=>canvas.toBlob(r,type,.95));
+  if(!blob)throw Error("Resolução não suportada pelo navegador.");
+  download(blob,"estudio-pro-montagem."+
+   (type==="image/jpeg"?"jpg":type.split("/")[1]));
+  msg("Montagem exportada.");
+ }catch(e){msg(e.message)}
+}
+render();
+</script>
+</body>
+</html>
