@@ -5,277 +5,268 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#080e1b">
-<title>ESTÚDIO PRO | Foto, Vídeo e Design</title>
+<meta name="description" content="ESTÚDIO PRO: edite fotos, crie designs, monte imagens e trabalhe com vídeos.">
+<title>ESTÚDIO PRO V2 — Foto, Vídeo e Design</title>
 <style>
 :root{
- --bg:#080e1b;--panel:#111c30;--card:#192740;
- --line:#30415c;--txt:#f4f7ff;--muted:#a9bad2;
- --blue:#348aff;--green:#18c89b;
+ --bg:#080d19;--panel:#111b2e;--card:#1a2941;
+ --line:#30415e;--text:#f4f7ff;--muted:#aabbd4;
+ --blue:#388bff;--green:#12ba91;--danger:#ef6071;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--txt);
-font-family:Arial,system-ui,sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer;border:0;border-radius:11px;
-padding:12px;color:white;background:var(--card)}
-button:hover{filter:brightness(1.2)}
-button:disabled{opacity:.4;cursor:not-allowed}
-.primary{background:var(--blue);font-weight:bold}
-.green{background:#087d66}
-header{padding:16px 4%;display:flex;align-items:center;
-justify-content:space-between;border-bottom:1px solid var(--line);
-background:#0c1627}
-.logo{font-weight:900;font-size:22px;letter-spacing:.5px}
-.logo span{color:var(--blue)}
-small,.muted{color:var(--muted)}
-main{max-width:1350px;margin:auto;padding:20px}
-.hero{padding:28px;border-radius:20px;
-background:linear-gradient(120deg,#142e60,#17223d 65%,#113c42)}
-.hero h1{font-size:clamp(25px,4vw,42px);margin:0 0 10px}
-.hero p{color:#d3dff5}
-.tools{display:grid;grid-template-columns:repeat(4,1fr);
-gap:12px;margin:20px 0}
-.tool{background:var(--panel);border:1px solid var(--line);
-border-radius:16px;padding:20px 10px;text-align:center;
-min-height:100px}
-.tool .emoji{font-size:28px;margin-bottom:10px}
-.tool strong{display:block}
-.tool small{display:block;margin-top:6px;font-size:11px}
-.tool.active{border-color:var(--blue);background:#18345c}
-.workspace{display:grid;grid-template-columns:265px minmax(0,1fr);
-gap:15px}
-.panel{background:var(--panel);border:1px solid var(--line);
-border-radius:17px;padding:16px;min-width:0}
-h2{margin:0 0 15px;font-size:20px}
-h3{font-size:14px;color:#d9e6fb;margin:18px 0 9px}
-.control{margin-bottom:14px}
-.control label{display:flex;justify-content:space-between;
-gap:8px;font-size:13px;margin-bottom:7px}
+body{margin:0;background:var(--bg);color:var(--text);
+ font-family:Arial,system-ui,sans-serif}
+button,input,select,textarea{font:inherit}
+button{border:1px solid transparent;border-radius:11px;
+ background:var(--card);color:white;padding:11px;cursor:pointer}
+button:hover{filter:brightness(1.16)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input,select,textarea{max-width:100%}
+input[type=text],input[type=number],select,textarea{
+ width:100%;padding:10px;border-radius:9px;
+ background:#0b1527;border:1px solid var(--line);color:white}
 input[type=range]{width:100%;accent-color:var(--blue)}
-input[type=number],input[type=text],select{
-background:#0c1729;color:white;border:1px solid var(--line);
-border-radius:9px;padding:10px;width:100%;min-width:0}
+input[type=color]{width:100%;height:39px;border:0;background:transparent}
 input[type=file]{display:none}
-.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.full{width:100%;margin-top:9px}
-.stage{min-height:370px;background:#090f1c;border-radius:12px;
-display:flex;align-items:center;justify-content:center;
-overflow:auto;padding:15px;position:relative}
-canvas{max-width:100%;height:auto;display:block}
-video{max-width:100%;max-height:480px;border-radius:9px}
-.empty{text-align:center;color:var(--muted);padding:35px}
-.empty .big{font-size:55px}
-.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.primary{background:var(--blue);font-weight:bold}
+.success{background:#087b64}
+.danger{background:#73313e}
+.full{width:100%}
+header{display:flex;justify-content:space-between;align-items:center;
+ padding:14px 3%;border-bottom:1px solid var(--line);background:#0d1729}
+.logo{font-size:22px;font-weight:900}
+.logo span{color:var(--blue)}
+.muted,small{color:var(--muted)}
+main{max-width:1600px;margin:auto;padding:16px}
+.hero{border-radius:18px;padding:23px;
+ background:linear-gradient(115deg,#183d7a,#17233b 65%,#145044)}
+.hero h1{font-size:clamp(24px,3.5vw,39px);margin:0 0 8px}
+.hero p{color:#d5e2fa;line-height:1.5}
+.modules{display:grid;grid-template-columns:repeat(6,1fr);
+ gap:10px;margin:17px 0}
+.module{min-height:96px;background:var(--panel);
+ border:1px solid var(--line);padding:12px 6px}
+.module.active{background:#1b3963;border-color:var(--blue)}
+.module b{display:block;margin:7px 0 4px}
+.module small{font-size:11px}
+.emoji{font-size:25px}
+.layout{display:grid;grid-template-columns:275px minmax(0,1fr) 230px;
+ gap:12px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);
+ border-radius:15px;padding:14px;min-width:0}
+h2{font-size:19px;margin:0 0 14px}
+h3{font-size:14px;margin:17px 0 9px;color:#d9e6fa}
+.control{margin:12px 0}
+.control label{display:flex;justify-content:space-between;
+ font-size:13px;margin-bottom:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.stack{display:grid;gap:8px}
+.stage{background:#070c16;border-radius:12px;
+ min-height:420px;display:flex;align-items:center;
+ justify-content:center;padding:16px;overflow:auto}
+canvas{display:block;max-width:100%;height:auto;
+ box-shadow:0 5px 25px #0007}
+video{max-width:100%;max-height:520px;border-radius:10px}
+.toolbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
 .toolbar button{font-size:13px}
-.hidden{display:none!important}
-.status{padding:11px;border-radius:10px;background:#102c3b;
-color:#bdece4;margin-top:12px;font-size:13px;min-height:39px}
-footer{text-align:center;padding:30px;color:var(--muted);
-font-size:12px}
-.info{background:#15233b;border:1px solid var(--line);
-border-radius:12px;padding:15px;line-height:1.7}
-.montage-grid{display:grid;grid-template-columns:repeat(2,1fr);
-gap:10px}
-@media(max-width:850px){
- .workspace{grid-template-columns:1fr}
- .tools{grid-template-columns:repeat(3,1fr)}
- .stage{min-height:280px}
+.status{background:#103042;border:1px solid #28516a;
+ border-radius:10px;padding:11px;margin-top:12px;
+ font-size:13px;color:#c6f5ed;overflow-wrap:anywhere}
+.layer{padding:10px;border:1px solid var(--line);
+ border-radius:9px;margin-bottom:7px;display:flex;
+ align-items:center;justify-content:space-between;gap:5px}
+.layer.active{border-color:var(--blue);background:#1a3455}
+.layer span{font-size:12px;overflow:hidden;text-overflow:ellipsis}
+.layer button{padding:6px}
+.empty{text-align:center;color:var(--muted);padding:25px}
+.empty div{font-size:52px}
+.note{padding:12px;background:#192943;border-radius:10px;
+ font-size:13px;line-height:1.6}
+.timeline{height:20px;background:#22334c;border-radius:10px;
+ position:relative;margin:15px 0;overflow:hidden}
+.timeline span{display:block;background:var(--blue);height:100%}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+@media(max-width:1150px){
+ .layout{grid-template-columns:255px minmax(0,1fr)}
+ .right{grid-column:1/-1}
 }
-@media(max-width:480px){
- main{padding:12px}
- header{padding:13px}
- .logo{font-size:19px}
- .hero{padding:20px}
- .tools{grid-template-columns:repeat(2,1fr)}
- .tool{padding:15px 6px}
- .panel{padding:12px}
+@media(max-width:750px){
+ .layout{grid-template-columns:1fr}
+ .right{grid-column:auto}
+ .modules{grid-template-columns:repeat(3,1fr)}
+ .stage{min-height:300px}
+}
+@media(max-width:450px){
+ main{padding:10px}
+ header{padding:12px}
+ .logo{font-size:18px}
+ .modules{grid-template-columns:repeat(2,1fr)}
+ .hero{padding:18px}
+ .panel{padding:11px}
 }
 </style>
 </head>
 <body>
 <header>
  <div class="logo">✦ ESTÚDIO <span>PRO</span></div>
- <small>ESTÚDIO DIGITAL V1</small>
+ <small>V2 • ESTÚDIO DIGITAL</small>
 </header>
 
 <main>
 <section class="hero">
- <h1>Seu estúdio criativo completo</h1>
- <p>Edite fotos, trabalhe com vídeos, crie montagens
- e exporte seus projetos em um só lugar.</p>
+ <h1>Crie sem limites</h1>
+ <p>Fotos, vídeos, montagens, designs e ferramentas
+ profissionais em um único estúdio.</p>
  <button class="primary" onclick="chooseFile()">＋ Importar arquivo</button>
+ <button onclick="newProject()">Novo projeto</button>
 </section>
 
-<nav class="tools" id="tools">
- <button class="tool active" data-tab="photo">
-  <div class="emoji">🖼️</div><strong>Foto PRO</strong>
-  <small>Editar e melhorar</small>
+<nav class="modules">
+ <button class="module active" data-tab="photo">
+  <div class="emoji">🖼️</div><b>Foto PRO</b><small>Editor completo</small>
  </button>
- <button class="tool" data-tab="video">
-  <div class="emoji">🎬</div><strong>Vídeo PRO</strong>
-  <small>Cortar e exportar</small>
+ <button class="module" data-tab="video">
+  <div class="emoji">🎬</div><b>Vídeo PRO</b><small>Cortes e áudio</small>
  </button>
- <button class="tool" data-tab="montage">
-  <div class="emoji">🧩</div><strong>Montagem</strong>
-  <small>Juntar imagens</small>
+ <button class="module" data-tab="design">
+  <div class="emoji">🎨</div><b>Design PRO</b><small>Textos e camadas</small>
  </button>
- <button class="tool" data-tab="convert">
-  <div class="emoji">🔄</div><strong>Conversor</strong>
-  <small>JPG, PNG, WEBP</small>
+ <button class="module" data-tab="montage">
+  <div class="emoji">🧩</div><b>Montagem</b><small>Colagens</small>
  </button>
- <button class="tool" data-tab="design">
-  <div class="emoji">🎨</div><strong>Design</strong>
-  <small>Texto e formatos</small>
+ <button class="module" data-tab="convert">
+  <div class="emoji">🔄</div><b>Conversor</b><small>JPG, PNG, WEBP</small>
  </button>
- <button class="tool" data-tab="print">
-  <div class="emoji">🖨️</div><strong>Impressão</strong>
-  <small>Foto 3×4 e A4</small>
- </button>
- <button class="tool" data-tab="audio">
-  <div class="emoji">🎵</div><strong>Áudio</strong>
-  <small>Controle do vídeo</small>
- </button>
- <button class="tool" data-tab="ai">
-  <div class="emoji">✨</div><strong>IA PRO</strong>
-  <small>Integração futura</small>
+ <button class="module" data-tab="print">
+  <div class="emoji">🖨️</div><b>Impressão</b><small>3×4 e A4</small>
  </button>
 </nav>
 
-<div class="workspace">
+<div class="layout">
 <aside class="panel">
 <h2 id="panelTitle">Editor de fotos</h2>
 
 <div id="photoControls">
  <button class="primary full" onclick="chooseFile()">Abrir foto</button>
- <h3>Ajustes</h3>
+ <h3>Filtros prontos</h3>
+ <div class="two">
+  <button onclick="preset('normal')">Original</button>
+  <button onclick="preset('vivid')">Vibrante</button>
+  <button onclick="preset('bw')">Preto e branco</button>
+  <button onclick="preset('vintage')">Vintage</button>
+  <button onclick="preset('bright')">Iluminar</button>
+  <button onclick="preset('cinema')">Cinema</button>
+ </div>
+ <h3>Ajustes profissionais</h3>
  <div id="sliders"></div>
- <h3>Transformação</h3>
- <div class="btns">
+ <h3>Transformar</h3>
+ <div class="two">
   <button onclick="rotate(-90)">↶ Girar</button>
   <button onclick="rotate(90)">↷ Girar</button>
   <button onclick="flip()">⇆ Espelhar</button>
-  <button onclick="resetPhoto()">Restaurar</button>
-  <button onclick="undo()">↩ Desfazer</button>
-  <button onclick="redo()">↪ Refazer</button>
+  <button onclick="cropCenter()">✂ Recorte central</button>
+  <button onclick="resetImage()">Restaurar</button>
+  <button onclick="applyFilters()">Aplicar filtros</button>
  </div>
- <h3>Texto</h3>
- <input id="photoText" type="text" placeholder="Digite um texto">
- <div class="control" style="margin-top:9px">
-  <label>Cor do texto</label>
-  <input id="textColor" type="color" value="#ffffff">
- </div>
- <button class="full" onclick="addText()">Adicionar texto</button>
- <h3>Exportar</h3>
- <select id="photoFormat">
-  <option value="image/png">PNG</option>
-  <option value="image/jpeg">JPG</option>
-  <option value="image/webp">WEBP</option>
- </select>
- <button class="green full" onclick="savePhoto()">⬇ Baixar imagem</button>
 </div>
 
-<div id="videoControls" class="hidden">
+<div id="videoControls" hidden>
  <button class="primary full" onclick="chooseFile()">Abrir vídeo</button>
- <h3>Cortar vídeo por tempo</h3>
+ <h3>Cortar por tempo</h3>
  <div class="control">
   <label>Início (segundos)</label>
-  <input type="number" id="startTime" value="0" min="0" step=".1">
+  <input id="startTime" type="number" value="0" min="0" step=".1">
  </div>
  <div class="control">
   <label>Fim (segundos)</label>
-  <input type="number" id="endTime" value="0" min="0" step=".1">
+  <input id="endTime" type="number" value="0" min="0" step=".1">
  </div>
- <button class="full" onclick="previewTrim()">▶ Prévia do corte</button>
+ <button class="full" onclick="previewTrim()">▶ Prévia do trecho</button>
  <h3>Velocidade</h3>
  <select id="speed">
-  <option value=".5">0.5x — Lento</option>
-  <option value="1" selected>1x — Normal</option>
-  <option value="1.5">1.5x — Rápido</option>
-  <option value="2">2x — Muito rápido</option>
+  <option value=".5">0.5x</option>
+  <option value="1" selected>Normal</option>
+  <option value="1.5">1.5x</option>
+  <option value="2">2x</option>
  </select>
  <h3>Volume</h3>
- <input type="range" id="volume" min="0" max="100" value="100">
- <h3>Exportação</h3>
- <button class="green full" onclick="exportVideo()">⬇ Exportar WEBM</button>
- <small>Exportação experimental com áudio quando suportado.
- Requer MediaRecorder, captura de tela do vídeo e Web Audio.</small>
+ <input id="volume" type="range" min="0" max="100" value="100">
+ <div class="timeline"><span id="timelineFill" style="width:0"></span></div>
+ <button class="success full" onclick="exportVideo()">Exportar WEBM</button>
+ <p class="muted" style="font-size:12px">
+  Exportação experimental. O suporte depende do navegador.
+ </p>
 </div>
 
-<div id="montageControls" class="hidden">
- <button class="primary full" onclick="selectMontage()">Adicionar fotos</button>
- <h3>Layout</h3>
- <select id="montageColumns">
-  <option value="1">Uma coluna</option>
-  <option value="2" selected>Duas colunas</option>
-  <option value="3">Três colunas</option>
-  <option value="4">Quatro colunas</option>
+<div id="designControls" hidden>
+ <button class="primary full" onclick="chooseFile()">Abrir imagem</button>
+ <h3>Formato</h3>
+ <select id="designSize">
+  <option value="1080x1080">Post 1080×1080</option>
+  <option value="1080x1920">Story 1080×1920</option>
+  <option value="1280x720">YouTube 1280×720</option>
+  <option value="1920x1080">Horizontal 1920×1080</option>
  </select>
- <button class="full" onclick="makeMontage()">Gerar montagem</button>
- <button class="green full" onclick="savePhoto()">⬇ Baixar montagem</button>
+ <button class="full" onclick="resizeDesign()">Aplicar formato</button>
+ <h3>Texto em camada</h3>
+ <input id="layerText" type="text" placeholder="Digite seu texto">
+ <div class="control">
+  <label>Tamanho</label>
+  <input id="fontSize" type="number" value="48" min="8" max="500">
+ </div>
+ <div class="control">
+  <label>Cor</label>
+  <input id="fontColor" type="color" value="#ffffff">
+ </div>
+ <button class="primary full" onclick="addTextLayer()">＋ Adicionar texto</button>
+ <p class="muted" style="font-size:12px">
+  Clique no texto na imagem e arraste para posicionar.
+ </p>
 </div>
 
-<div id="convertControls" class="hidden">
+<div id="montageControls" hidden>
+ <button class="primary full" onclick="selectMontage()">Adicionar fotos</button>
+ <h3>Colunas</h3>
+ <select id="montageColumns">
+  <option value="1">1 coluna</option>
+  <option value="2" selected>2 colunas</option>
+  <option value="3">3 colunas</option>
+  <option value="4">4 colunas</option>
+ </select>
+ <button class="full" onclick="makeMontage()">Criar montagem</button>
+</div>
+
+<div id="convertControls" hidden>
  <button class="primary full" onclick="chooseFile()">Abrir imagem</button>
  <h3>Dimensões</h3>
+ <input id="newWidth" type="number" placeholder="Largura">
+ <input id="newHeight" type="number" placeholder="Altura"
+ style="margin-top:8px">
  <div class="control">
-  <label>Largura (pixels)</label>
-  <input type="number" id="newWidth" min="1" max="12000">
+  <label><span>Manter proporção</span>
+   <input id="keepRatio" type="checkbox" checked></label>
  </div>
- <div class="control">
-  <label>Altura (pixels)</label>
-  <input type="number" id="newHeight" min="1" max="12000">
- </div>
- <label><input type="checkbox" id="keepRatio" checked>
- Manter proporção</label>
  <h3>Formato</h3>
  <select id="convertFormat">
-  <option value="image/jpeg">JPG</option>
   <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
   <option value="image/webp">WEBP</option>
  </select>
- <button class="green full" onclick="convertImage()">Converter e baixar</button>
+ <button class="success full" onclick="convertImage()">Converter e baixar</button>
 </div>
 
-<div id="designControls" class="hidden">
- <button class="primary full" onclick="chooseFile()">Abrir imagem</button>
- <h3>Formato de design</h3>
- <select id="designSize">
-  <option value="1080x1080">Post quadrado — 1080×1080</option>
-  <option value="1080x1920">Story — 1080×1920</option>
-  <option value="1280x720">Miniatura — 1280×720</option>
-  <option value="1920x1080">Horizontal — 1920×1080</option>
- </select>
- <button class="full" onclick="applyDesignSize()">Aplicar formato</button>
- <h3>Adicionar título</h3>
- <input type="text" id="designText" placeholder="Título do design">
- <button class="full" onclick="addDesignText()">Adicionar título</button>
- <button class="green full" onclick="savePhoto()">Baixar design</button>
-</div>
-
-<div id="printControls" class="hidden">
+<div id="printControls" hidden>
  <button class="primary full" onclick="chooseFile()">Abrir foto</button>
- <h3>Preparação</h3>
- <button class="full" onclick="prepare3x4()">Foto 3×4 cm</button>
- <button class="full" onclick="prepareA4()">Organizar na folha A4</button>
- <button class="green full" onclick="printPhoto()">🖨 Imprimir</button>
- <small>Confira a escala nas configurações da impressora.</small>
-</div>
-
-<div id="audioControls" class="hidden">
- <h3>Áudio do vídeo</h3>
- <p class="muted">Abra um vídeo para controlar o volume,
- a velocidade e exportar o trecho selecionado.</p>
- <button class="primary full" onclick="openTab('video')">Abrir editor de vídeo</button>
-</div>
-
-<div id="aiControls" class="hidden">
- <div class="info">
-  <strong>IA PRO — Em desenvolvimento</strong>
-  <p>Remoção de fundo, restauração, geração de imagens,
-  legendas automáticas e dublagem serão integradas
-  com modelos ou serviços de IA.</p>
-  <small>Essas funções ainda não estão disponíveis nesta versão.</small>
+ <h3>Documentos e impressão</h3>
+ <div class="stack">
+  <button onclick="prepare3x4()">Foto 3×4</button>
+  <button onclick="prepareA4()">Folha A4</button>
+  <button class="success" onclick="printImage()">Imprimir</button>
  </div>
+ <p class="muted" style="font-size:12px">
+  Ajuste a escala da impressora antes de imprimir.
+ </p>
 </div>
 </aside>
 
@@ -284,768 +275,667 @@ gap:10px}
   <button onclick="chooseFile()">＋ Importar</button>
   <button onclick="undo()">↩ Desfazer</button>
   <button onclick="redo()">↪ Refazer</button>
-  <button onclick="savePhoto()">⬇ Salvar imagem</button>
+  <button onclick="saveProject()">💾 Salvar projeto</button>
+  <button onclick="loadProject()">📂 Abrir projeto</button>
+  <button class="success" onclick="downloadImage()">⬇ Exportar</button>
  </div>
-
- <div class="stage" id="stage">
+ <div class="stage">
   <div id="empty" class="empty">
-   <div class="big">✦</div>
+   <div>✦</div>
    <h2>Seu projeto começa aqui</h2>
-   <p>Importe uma foto ou vídeo para editar.</p>
+   <p>Importe uma imagem ou vídeo.</p>
   </div>
-  <canvas id="canvas" class="hidden"></canvas>
-  <video id="video" class="hidden" controls playsinline></video>
+  <canvas id="canvas" hidden></canvas>
+  <video id="video" controls playsinline hidden></video>
  </div>
-
  <div class="status" id="status" role="status" aria-live="polite">
-  Pronto para começar.
+  ESTÚDIO PRO V2 iniciado.
  </div>
- <div style="margin-top:15px">
-  <small id="details">Nenhum arquivo carregado.</small>
- </div>
+ <p class="muted" id="details">Nenhum arquivo carregado.</p>
 </section>
+
+<aside class="panel right">
+ <h2>Camadas</h2>
+ <div id="layersList"></div>
+ <div class="two">
+  <button onclick="moveLayer(1)">↑ Subir</button>
+  <button onclick="moveLayer(-1)">↓ Descer</button>
+  <button class="danger" onclick="deleteLayer()">Excluir</button>
+  <button onclick="duplicateLayer()">Duplicar</button>
+ </div>
+ <h3>Exportar imagem</h3>
+ <select id="imageFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+  <option value="image/webp">WEBP</option>
+ </select>
+ <button class="success full" style="margin-top:8px"
+ onclick="downloadImage()">Baixar imagem</button>
+ <h3>Informações</h3>
+ <div class="note">
+  <div id="dimensions">Sem imagem</div>
+  <p>Projetos de imagem podem ser salvos localmente
+  no navegador, sujeitos ao espaço disponível.</p>
+ </div>
+</aside>
 </div>
 
 <input type="file" id="fileInput" accept="image/*,video/*">
 <input type="file" id="montageInput" accept="image/*" multiple>
-
 </main>
 
 <footer>
-ESTÚDIO PRO © 2026 — Plataforma de criação digital
-<br>Seus arquivos são processados localmente nas ferramentas desta versão.
+ESTÚDIO PRO © 2026 — Foto, Vídeo e Design
 </footer>
 
 <script>
 "use strict";
+const $=id=>document.getElementById(id);
+const canvas=$("canvas"),ctx=canvas.getContext("2d");
+const video=$("video");
+let base=null,original=null,layers=[],selected=-1;
+let history=[],future=[],tab="photo";
+let montage=[],videoURL=null,previewing=false;
+let dragging=false,recording=false;
+let videoAudioContext=null,videoAudioSource=null,videoAudioGain=null;
 
-const $ = id => document.getElementById(id);
-const canvas = $("canvas");
-const ctx = canvas.getContext("2d");
-const video = $("video");
-
-let currentTab = "photo";
-let original = null;
-let imageState = null;
-let undoStack = [];
-let redoStack = [];
-let montageImages = [];
-let videoURL = null;
-let trimPreview = false;
-let recording = false;
-
-const adjustments = {
- brightness:100,
- contrast:100,
- saturation:100,
- grayscale:0,
- blur:0
-};
-
-const sliderData = [
- ["brightness","Brilho",0,200,100,"%"],
- ["contrast","Contraste",0,200,100,"%"],
- ["saturation","Saturação",0,200,100,"%"],
- ["grayscale","Preto e branco",0,100,0,"%"],
- ["blur","Desfoque",0,15,0,"px"]
+const defaults={brightness:100,contrast:100,saturate:100,
+ grayscale:0,sepia:0,blur:0};
+let filters={...defaults};
+const controls=[
+ ["brightness","Brilho",0,200,"%"],
+ ["contrast","Contraste",0,200,"%"],
+ ["saturate","Saturação",0,200,"%"],
+ ["grayscale","Preto e branco",0,100,"%"],
+ ["sepia","Sépia",0,100,"%"],
+ ["blur","Desfoque",0,15,"px"]
 ];
 
-function status(message){
- $("status").textContent = message;
+function message(t){$("status").textContent=t}
+function createCanvas(w,h){
+ const c=document.createElement("canvas");
+ c.width=w;c.height=h;return c;
 }
-
-function details(message){
- $("details").textContent = message;
+function copy(c){
+ const n=createCanvas(c.width,c.height);
+ n.getContext("2d").drawImage(c,0,0);return n;
 }
-
+function blobOf(c,type="image/png",quality=.92){
+ return new Promise(r=>c.toBlob(r,type,quality));
+}
+function download(blob,name){
+ if(!blob)return message("Não foi possível gerar o arquivo.");
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function filterCSS(){
+ return `brightness(${filters.brightness}%)
+ contrast(${filters.contrast}%)
+ saturate(${filters.saturate}%)
+ grayscale(${filters.grayscale}%)
+ sepia(${filters.sepia}%)
+ blur(${filters.blur}px)`;
+}
+function resetSliders(){
+ filters={...defaults};
+ controls.forEach(([k,,,unit])=>{
+  $("s-"+k).value=filters[k];
+  $("v-"+k).textContent=filters[k]+unit;
+ });
+}
 function buildSliders(){
- $("sliders").innerHTML = "";
- sliderData.forEach(([key,label,min,max,val,unit])=>{
-  const div = document.createElement("div");
-  div.className = "control";
-  div.innerHTML = `
-   <label>${label}<span id="value-${key}">${val}${unit}</span></label>
-   <input type="range" id="slider-${key}"
-   min="${min}" max="${max}" value="${val}">`;
-  $("sliders").appendChild(div);
-  $("slider-"+key).addEventListener("input",e=>{
-   adjustments[key] = Number(e.target.value);
-   $("value-"+key).textContent = e.target.value+unit;
-   renderPhoto();
-  });
+ controls.forEach(([k,label,min,max,unit])=>{
+  const d=document.createElement("div");d.className="control";
+  d.innerHTML=`<label>${label}<span id="v-${k}">${defaults[k]}${unit}</span></label>
+  <input id="s-${k}" type="range" min="${min}" max="${max}"
+  value="${defaults[k]}">`;
+  $("sliders").appendChild(d);
+  $("s-"+k).oninput=e=>{
+   filters[k]=+e.target.value;
+   $("v-"+k).textContent=filters[k]+unit;
+   render();
+  };
  });
 }
 buildSliders();
 
-const tabs = [
- "photo","video","montage","convert",
- "design","print","audio","ai"
-];
-
-const titles = {
- photo:"Editor de fotos",
- video:"Editor de vídeos",
- montage:"Montagem de fotos",
- convert:"Conversor de imagens",
- design:"Editor de design",
- print:"Preparação para impressão",
- audio:"Ferramentas de áudio",
- ai:"Inteligência artificial"
-};
-
-document.querySelectorAll("[data-tab]").forEach(btn=>{
- btn.addEventListener("click",()=>openTab(btn.dataset.tab));
-});
-
-function openTab(tab){
- currentTab = tab;
- tabs.forEach(t=>{
-  $(t+"Controls").classList.toggle("hidden",t!==tab);
+const names={photo:"Editor de fotos",video:"Editor de vídeos",
+ design:"Design e camadas",montage:"Montagem",
+ convert:"Conversor",print:"Impressão"};
+function openTab(t){
+ tab=t;
+ Object.keys(names).forEach(k=>{
+  $(k+"Controls").hidden=k!==t;
  });
- document.querySelectorAll("[data-tab]").forEach(btn=>{
-  btn.classList.toggle("active",btn.dataset.tab===tab);
- });
- $("panelTitle").textContent = titles[tab];
-
- if(tab==="video" || tab==="audio"){
-  showVideo();
- }else{
-  showCanvas();
- }
- status("Módulo "+titles[tab]+" selecionado.");
+ document.querySelectorAll(".module").forEach(b=>
+  b.classList.toggle("active",b.dataset.tab===t));
+ $("panelTitle").textContent=names[t];
+ showMedia();
 }
+document.querySelectorAll(".module").forEach(b=>
+ b.onclick=()=>openTab(b.dataset.tab));
 
-function showCanvas(){
- video.pause();
- video.classList.add("hidden");
- if(imageState){
-  canvas.classList.remove("hidden");
-  $("empty").classList.add("hidden");
- }else{
-  canvas.classList.add("hidden");
-  $("empty").classList.remove("hidden");
- }
+function showMedia(){
+ const isVideo=tab==="video";
+ canvas.hidden=isVideo||!base;
+ video.hidden=!isVideo||!videoURL;
+ $("empty").hidden=(isVideo?!!videoURL:!!base);
+ if(!isVideo)video.pause();
 }
-
-function showVideo(){
- canvas.classList.add("hidden");
- if(videoURL){
-  video.classList.remove("hidden");
-  $("empty").classList.add("hidden");
- }else{
-  video.classList.add("hidden");
-  $("empty").classList.remove("hidden");
- }
-}
-
 function chooseFile(){
- $("fileInput").value="";
- $("fileInput").click();
+ $("fileInput").value="";$("fileInput").click();
 }
-
-$("fileInput").addEventListener("change",async e=>{
- const file=e.target.files[0];
- if(!file)return;
- if(file.type.startsWith("image/")){
-  await loadImage(file);
-  if(currentTab==="video" || currentTab==="audio")openTab("photo");
- }else if(file.type.startsWith("video/")){
-  loadVideo(file);
-  openTab("video");
- }else{
-  status("Formato não suportado.");
- }
-});
-
-function imageFromFile(file){
+function fileImage(file){
  return new Promise((resolve,reject)=>{
-  const url=URL.createObjectURL(file);
-  const img=new Image();
-  img.onload=()=>{
-   URL.revokeObjectURL(url);
-   resolve(img);
-  };
-  img.onerror=()=>{
-   URL.revokeObjectURL(url);
-   reject(new Error("Não foi possível abrir a imagem."));
-  };
+  const url=URL.createObjectURL(file),img=new Image();
+  img.onload=()=>{URL.revokeObjectURL(url);resolve(img)};
+  img.onerror=()=>{URL.revokeObjectURL(url);reject(Error("Imagem inválida"))};
   img.src=url;
  });
 }
-
-function copyCanvas(source){
- const c=document.createElement("canvas");
- c.width=source.width;
- c.height=source.height;
- c.getContext("2d").drawImage(source,0,0);
- return c;
-}
-
-function createImageCanvas(img){
- const c=document.createElement("canvas");
- c.width=img.naturalWidth;
- c.height=img.naturalHeight;
- c.getContext("2d").drawImage(img,0,0);
- return c;
-}
-
-async function loadImage(file){
+$("fileInput").onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
  try{
-  const img=await imageFromFile(file);
-  original=createImageCanvas(img);
-  imageState=copyCanvas(original);
-  undoStack=[];
-  redoStack=[];
-  resetAdjustments();
-  renderPhoto();
-  showCanvas();
-  updateDimensions();
-  status("Imagem carregada: "+file.name);
- }catch(err){
-  status(err.message);
- }
-}
-
-function updateDimensions(){
- if(!imageState)return;
- $("newWidth").value=imageState.width;
- $("newHeight").value=imageState.height;
- details(imageState.width+" × "+imageState.height+" pixels");
-}
-
-function filterString(){
- return `brightness(${adjustments.brightness}%)
- contrast(${adjustments.contrast}%)
- saturate(${adjustments.saturation}%)
- grayscale(${adjustments.grayscale}%)
- blur(${adjustments.blur}px)`;
-}
-
-function renderPhoto(){
- if(!imageState)return;
- canvas.width=imageState.width;
- canvas.height=imageState.height;
- ctx.clearRect(0,0,canvas.width,canvas.height);
- ctx.filter=filterString();
- ctx.drawImage(imageState,0,0);
- ctx.filter="none";
- showCanvas();
-}
-
-function resetAdjustments(){
- sliderData.forEach(([key,,min,max,val,unit])=>{
-  adjustments[key]=val;
-  $("slider-"+key).value=val;
-  $("value-"+key).textContent=val+unit;
- });
-}
-
+  if(f.type.startsWith("image/")){
+   const img=await fileImage(f);
+   base=createCanvas(img.naturalWidth,img.naturalHeight);
+   base.getContext("2d").drawImage(img,0,0);
+   original=copy(base);layers=[];selected=-1;
+   history=[];future=[];resetSliders();render();
+   if(tab==="video")openTab("photo");
+   message("Imagem carregada: "+f.name);
+  }else if(f.type.startsWith("video/")){
+   loadVideo(f);openTab("video");
+  }else message("Formato não suportado.");
+ }catch(err){message(err.message)}
+};
 function snapshot(){
- if(!imageState)return;
- undoStack.push(copyCanvas(imageState));
- if(undoStack.length>15)undoStack.shift();
- redoStack=[];
-}
-
-function commitFilters(){
- if(!imageState)return;
- const c=document.createElement("canvas");
- c.width=imageState.width;
- c.height=imageState.height;
- const cctx=c.getContext("2d");
- cctx.filter=filterString();
- cctx.drawImage(imageState,0,0);
- imageState=c;
- resetAdjustments();
-}
-
-function undo(){
- if(!undoStack.length){
-  status("Nenhuma alteração para desfazer.");
-  return;
- }
- redoStack.push(copyCanvas(imageState));
- imageState=undoStack.pop();
- resetAdjustments();
- renderPhoto();
- updateDimensions();
- status("Alteração desfeita.");
-}
-
-function redo(){
- if(!redoStack.length){
-  status("Nenhuma alteração para refazer.");
-  return;
- }
- undoStack.push(copyCanvas(imageState));
- imageState=redoStack.pop();
- resetAdjustments();
- renderPhoto();
- updateDimensions();
- status("Alteração refeita.");
-}
-
-function rotate(deg){
- if(!imageState)return status("Abra uma foto primeiro.");
- snapshot();
- commitFilters();
- const c=document.createElement("canvas");
- c.width=imageState.height;
- c.height=imageState.width;
- const x=c.getContext("2d");
- x.translate(c.width/2,c.height/2);
- x.rotate(deg*Math.PI/180);
- x.drawImage(imageState,-imageState.width/2,-imageState.height/2);
- imageState=c;
- renderPhoto();
- updateDimensions();
-}
-
-function flip(){
- if(!imageState)return status("Abra uma foto primeiro.");
- snapshot();
- commitFilters();
- const c=document.createElement("canvas");
- c.width=imageState.width;
- c.height=imageState.height;
- const x=c.getContext("2d");
- x.translate(c.width,0);
- x.scale(-1,1);
- x.drawImage(imageState,0,0);
- imageState=c;
- renderPhoto();
-}
-
-function resetPhoto(){
- if(!original)return status("Nenhuma foto original.");
- snapshot();
- imageState=copyCanvas(original);
- resetAdjustments();
- renderPhoto();
- updateDimensions();
- status("Foto original restaurada.");
-}
-
-function addText(){
- addTextValue($("photoText").value,$("textColor").value);
-}
-
-function addDesignText(){
- addTextValue($("designText").value,"#ffffff");
-}
-
-function addTextValue(text,color){
- if(!imageState)return status("Abra uma imagem primeiro.");
- if(!text.trim())return status("Digite o texto.");
- snapshot();
- commitFilters();
- const x=imageState.getContext("2d");
- const size=Math.max(16,Math.round(imageState.width*.055));
- x.font=`bold ${size}px Arial`;
- x.textAlign="center";
- x.textBaseline="middle";
- x.lineWidth=Math.max(2,size/10);
- x.strokeStyle="#000000";
- x.fillStyle=color;
- const lines=text.trim().split("\n");
- lines.forEach((line,i)=>{
-  const y=imageState.height/2+i*size*1.2;
-  x.strokeText(line,imageState.width/2,y,imageState.width*.9);
-  x.fillText(line,imageState.width/2,y,imageState.width*.9);
+ if(!base)return;
+ history.push({
+  base:copy(base),layers:structuredClone(layers),
+  filters:{...filters}
  });
- renderPhoto();
- status("Texto adicionado à imagem.");
+ if(history.length>20)history.shift();
+ future=[];
 }
-
-function downloadBlob(blob,name){
- if(!blob)return status("Falha ao gerar arquivo.");
- const url=URL.createObjectURL(blob);
- const a=document.createElement("a");
- a.href=url;
- a.download=name;
- document.body.appendChild(a);
- a.click();
- a.remove();
- setTimeout(()=>URL.revokeObjectURL(url),60000);
+function restore(s){
+ base=copy(s.base);layers=structuredClone(s.layers);
+ filters={...s.filters};
+ controls.forEach(([k,,,unit])=>{
+  $("s-"+k).value=filters[k];
+  $("v-"+k).textContent=filters[k]+unit;
+ });
+ selected=-1;render();
 }
-
-function canvasBlob(c,type,quality=.92){
- return new Promise(resolve=>c.toBlob(resolve,type,quality));
+function undo(){
+ if(!history.length)return message("Nada para desfazer.");
+ future.push({base:copy(base),layers:structuredClone(layers),
+ filters:{...filters}});
+ restore(history.pop());message("Desfeito.");
 }
-
-async function savePhoto(){
- if(!imageState)return status("Abra ou crie uma imagem primeiro.");
- const type=$("photoFormat").value;
- const ext=type.split("/")[1].replace("jpeg","jpg");
- const blob=await canvasBlob(canvas,type);
- downloadBlob(blob,"estudio-pro."+ext);
- status("Imagem exportada.");
+function redo(){
+ if(!future.length)return message("Nada para refazer.");
+ history.push({base:copy(base),layers:structuredClone(layers),
+ filters:{...filters}});
+ restore(future.pop());message("Refeito.");
 }
-
-$("newWidth").addEventListener("input",()=>{
- if(!imageState || !$("keepRatio").checked)return;
- const w=Number($("newWidth").value);
- if(w>0)$("newHeight").value=Math.round(
- w*imageState.height/imageState.width);
-});
-
-$("newHeight").addEventListener("input",()=>{
- if(!imageState || !$("keepRatio").checked)return;
- const h=Number($("newHeight").value);
- if(h>0)$("newWidth").value=Math.round(
- h*imageState.width/imageState.height);
-});
-
-async function convertImage(){
- if(!imageState)return status("Abra uma imagem.");
- const w=Number($("newWidth").value);
- const h=Number($("newHeight").value);
- if(!Number.isInteger(w)||!Number.isInteger(h)||
- w<1||h<1||w>12000||h>12000){
-  return status("Dimensões inválidas.");
+function drawText(x,l){
+ x.save();
+ x.font=`bold ${l.size}px Arial`;
+ x.textAlign="center";x.textBaseline="middle";
+ x.fillStyle=l.color;
+ x.strokeStyle="#000000";
+ x.lineWidth=Math.max(2,l.size*.09);
+ x.strokeText(l.text,l.x,l.y,base.width*.95);
+ x.fillText(l.text,l.x,l.y,base.width*.95);
+ x.restore();
+}
+function render(){
+ if(!base)return;
+ canvas.width=base.width;canvas.height=base.height;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.filter=filterCSS();ctx.drawImage(base,0,0);
+ ctx.filter="none";
+ layers.forEach(l=>{if(l.visible!==false)drawText(ctx,l)});
+ $("dimensions").textContent=base.width+" × "+base.height+" pixels";
+ $("details").textContent=$("dimensions").textContent;
+ $("newWidth").value=base.width;
+ $("newHeight").value=base.height;
+ showMedia();renderLayers();
+}
+function renderLayers(){
+ const list=$("layersList");list.replaceChildren();
+ if(!layers.length){
+  const p=document.createElement("p");p.className="muted";
+  p.textContent="Nenhuma camada de texto.";list.appendChild(p);return;
  }
- const c=document.createElement("canvas");
- c.width=w;c.height=h;
+ layers.forEach((l,i)=>{
+  const row=document.createElement("div");
+  row.className="layer"+(i===selected?" active":"");
+  const name=document.createElement("span");
+  name.textContent="T "+l.text;
+  const select=document.createElement("button");
+  select.textContent="Selecionar";
+  select.onclick=()=>{selected=i;renderLayers()};
+  row.append(name,select);list.appendChild(row);
+ });
+}
+function preset(name){
+ if(!base)return message("Abra uma foto.");
+ const p={
+  normal:{...defaults},
+  vivid:{...defaults,contrast:115,saturate:145},
+  bw:{...defaults,grayscale:100,contrast:110},
+  vintage:{...defaults,sepia:55,saturate:80},
+  bright:{...defaults,brightness:120,contrast:108},
+  cinema:{...defaults,contrast:125,saturate:80}
+ };
+ filters={...p[name]};
+ controls.forEach(([k,,,unit])=>{
+  $("s-"+k).value=filters[k];
+  $("v-"+k).textContent=filters[k]+unit;
+ });
+ render();
+}
+function applyFilters(){
+ if(!base)return message("Abra uma imagem.");
+ snapshot();
+ const c=createCanvas(base.width,base.height);
+ const x=c.getContext("2d");x.filter=filterCSS();x.drawImage(base,0,0);
+ base=c;resetSliders();render();message("Filtros aplicados.");
+}
+function bakeFilters(){
+ const c=createCanvas(base.width,base.height);
+ const x=c.getContext("2d");x.filter=filterCSS();x.drawImage(base,0,0);
+ base=c;resetSliders();
+}
+function transform(draw,w,h){
+ if(!base)return message("Abra uma imagem.");
+ snapshot();bakeFilters();
+ const c=createCanvas(w,h),x=c.getContext("2d");
+ draw(x);base=c;render();
+}
+function rotate(deg){
+ if(!base)return message("Abra uma imagem.");
+ const w=base.width,h=base.height;
+ transform(x=>{
+  x.translate(h/2,w/2);x.rotate(deg*Math.PI/180);
+  x.drawImage(base,-w/2,-h/2);
+  layers.forEach(l=>{
+   const px=l.x-w/2,py=l.y-h/2;
+   const rad=deg*Math.PI/180;
+   l.x=h/2+px*Math.cos(rad)-py*Math.sin(rad);
+   l.y=w/2+px*Math.sin(rad)+py*Math.cos(rad);
+  });
+ },h,w);
+}
+function flip(){
+ if(!base)return message("Abra uma imagem.");
+ const w=base.width,h=base.height;
+ transform(x=>{
+  x.translate(w,0);x.scale(-1,1);x.drawImage(base,0,0);
+  layers.forEach(l=>l.x=w-l.x);
+ },w,h);
+}
+function cropCenter(){
+ if(!base)return message("Abra uma imagem.");
+ const size=Math.min(base.width,base.height);
+ const sx=(base.width-size)/2,sy=(base.height-size)/2;
+ transform(x=>{
+  x.drawImage(base,sx,sy,size,size,0,0,size,size);
+  layers.forEach(l=>{l.x-=sx;l.y-=sy});
+ },size,size);
+}
+function resetImage(){
+ if(!original)return message("Nenhuma imagem original.");
+ snapshot();base=copy(original);layers=[];
+ selected=-1;resetSliders();render();
+}
+function addTextLayer(){
+ if(!base)return message("Abra uma imagem.");
+ const text=$("layerText").value.trim();
+ if(!text)return message("Digite o texto.");
+ const size=+$("fontSize").value;
+ if(!Number.isFinite(size)||size<8||size>500)
+  return message("Tamanho inválido.");
+ snapshot();
+ layers.push({text,size,color:$("fontColor").value,
+ x:base.width/2,y:base.height/2,visible:true});
+ selected=layers.length-1;render();
+}
+function deleteLayer(){
+ if(selected<0)return;
+ snapshot();layers.splice(selected,1);selected=-1;render();
+}
+function duplicateLayer(){
+ if(selected<0)return;
+ snapshot();
+ const l=structuredClone(layers[selected]);
+ l.x+=30;l.y+=30;layers.push(l);
+ selected=layers.length-1;render();
+}
+function moveLayer(direction){
+ if(selected<0)return;
+ const next=selected+direction;
+ if(next<0||next>=layers.length)return;
+ snapshot();
+ [layers[selected],layers[next]]=[layers[next],layers[selected]];
+ selected=next;render();
+}
+function canvasPoint(e){
+ const r=canvas.getBoundingClientRect();
+ return {x:(e.clientX-r.left)*canvas.width/r.width,
+ y:(e.clientY-r.top)*canvas.height/r.height};
+}
+function hitLayer(p){
+ for(let i=layers.length-1;i>=0;i--){
+  const l=layers[i],w=Math.min(base.width*.95,
+   l.text.length*l.size*.65);
+  if(Math.abs(p.x-l.x)<w/2+15&&
+   Math.abs(p.y-l.y)<l.size*.7)return i;
+ }
+ return -1;
+}
+canvas.addEventListener("pointerdown",e=>{
+ if(!base||tab!=="design")return;
+ const p=canvasPoint(e),i=hitLayer(p);
+ if(i<0)return;
+ selected=i;snapshot();dragging=true;
+ canvas.setPointerCapture(e.pointerId);renderLayers();
+});
+canvas.addEventListener("pointermove",e=>{
+ if(!dragging||selected<0)return;
+ const p=canvasPoint(e);
+ layers[selected].x=p.x;layers[selected].y=p.y;render();
+});
+canvas.addEventListener("pointerup",()=>dragging=false);
+canvas.addEventListener("pointercancel",()=>dragging=false);
+
+function resizeDesign(){
+ if(!base)return message("Abra uma imagem.");
+ const [w,h]=$("designSize").value.split("x").map(Number);
+ snapshot();bakeFilters();
+ const c=createCanvas(w,h),x=c.getContext("2d");
+ x.fillStyle="#182842";x.fillRect(0,0,w,h);
+ const s=Math.min(w/base.width,h/base.height);
+ const dx=(w-base.width*s)/2,dy=(h-base.height*s)/2;
+ x.drawImage(base,dx,dy,base.width*s,base.height*s);
+ layers.forEach(l=>{
+  l.x=dx+l.x*s;l.y=dy+l.y*s;l.size*=s;
+ });
+ base=c;render();
+}
+function selectMontage(){
+ $("montageInput").value="";$("montageInput").click();
+}
+$("montageInput").onchange=async e=>{
+ try{
+  montage=await Promise.all([...e.target.files]
+   .filter(f=>f.type.startsWith("image/")).map(fileImage));
+  await makeMontage();
+ }catch(err){message(err.message)}
+};
+async function makeMontage(){
+ if(!montage.length)return message("Selecione fotos.");
+ const cols=+$("montageColumns").value,rows=Math.ceil(montage.length/cols);
+ const cell=450,gap=12;
+ const c=createCanvas(cols*cell+(cols+1)*gap,
+ rows*cell+(rows+1)*gap);
  const x=c.getContext("2d");
+ x.fillStyle="white";x.fillRect(0,0,c.width,c.height);
+ montage.forEach((img,i)=>{
+  const px=gap+(i%cols)*(cell+gap);
+  const py=gap+Math.floor(i/cols)*(cell+gap);
+  const s=Math.max(cell/img.width,cell/img.height);
+  const sw=cell/s,sh=cell/s;
+  x.drawImage(img,(img.width-sw)/2,(img.height-sh)/2,
+   sw,sh,px,py,cell,cell);
+ });
+ base=c;original=copy(c);layers=[];selected=-1;
+ history=[];future=[];resetSliders();render();
+ message("Montagem criada.");
+}
+$("newWidth").onchange=()=>{
+ if(!base||!$("keepRatio").checked)return;
+ const w=+$("newWidth").value;
+ if(w>0)$("newHeight").value=Math.round(w*base.height/base.width);
+};
+$("newHeight").onchange=()=>{
+ if(!base||!$("keepRatio").checked)return;
+ const h=+$("newHeight").value;
+ if(h>0)$("newWidth").value=Math.round(h*base.width/base.height);
+};
+async function convertImage(){
+ if(!base)return message("Abra uma imagem.");
+ const w=+$("newWidth").value,h=+$("newHeight").value;
+ if(!Number.isInteger(w)||!Number.isInteger(h)||
+ w<1||h<1||w>12000||h>12000)
+  return message("Dimensões inválidas.");
+ const c=createCanvas(w,h),x=c.getContext("2d");
  const type=$("convertFormat").value;
  if(type==="image/jpeg"){
-  x.fillStyle="white";
-  x.fillRect(0,0,w,h);
+  x.fillStyle="white";x.fillRect(0,0,w,h);
  }
  x.drawImage(canvas,0,0,w,h);
- const blob=await canvasBlob(c,type);
- const ext=type==="image/jpeg"?"jpg":type.split("/")[1];
- downloadBlob(blob,"estudio-pro-convertido."+ext);
- status("Imagem convertida.");
+ const blob=await blobOf(c,type);
+ download(blob,"estudio-pro-convertido."+
+  (type==="image/jpeg"?"jpg":type.split("/")[1]));
 }
-
-function applyDesignSize(){
- if(!imageState)return status("Abra uma imagem.");
- snapshot();
- commitFilters();
- const [w,h]=$("designSize").value.split("x").map(Number);
- const c=document.createElement("canvas");
- c.width=w;c.height=h;
- const x=c.getContext("2d");
- x.fillStyle="#15233b";
- x.fillRect(0,0,w,h);
- const scale=Math.min(w/imageState.width,h/imageState.height);
- const dw=imageState.width*scale;
- const dh=imageState.height*scale;
- x.drawImage(imageState,(w-dw)/2,(h-dh)/2,dw,dh);
- imageState=c;
- renderPhoto();
- updateDimensions();
- status("Formato aplicado.");
-}
-
-function selectMontage(){
- $("montageInput").value="";
- $("montageInput").click();
-}
-
-$("montageInput").addEventListener("change",async e=>{
- try{
-  const files=Array.from(e.target.files).filter(f=>
-   f.type.startsWith("image/"));
-  if(!files.length)return;
-  montageImages=await Promise.all(files.map(imageFromFile));
-  status(montageImages.length+" fotos adicionadas.");
-  await makeMontage();
- }catch(err){
-  status("Erro ao carregar fotos: "+err.message);
- }
-});
-
-async function makeMontage(){
- if(!montageImages.length)return status("Adicione fotos.");
- const cols=Number($("montageColumns").value);
- const rows=Math.ceil(montageImages.length/cols);
- const cellW=500,cellH=500,gap=12;
- const c=document.createElement("canvas");
- c.width=cols*cellW+(cols+1)*gap;
- c.height=rows*cellH+(rows+1)*gap;
- const x=c.getContext("2d");
- x.fillStyle="#ffffff";
- x.fillRect(0,0,c.width,c.height);
-
- montageImages.forEach((img,i)=>{
-  const col=i%cols,row=Math.floor(i/cols);
-  const px=gap+col*(cellW+gap);
-  const py=gap+row*(cellH+gap);
-  const scale=Math.max(cellW/img.width,cellH/img.height);
-  const sw=cellW/scale,sh=cellH/scale;
-  const sx=(img.width-sw)/2,sy=(img.height-sh)/2;
-  x.drawImage(img,sx,sy,sw,sh,px,py,cellW,cellH);
- });
- snapshot();
- imageState=c;
- original=copyCanvas(c);
- undoStack=[];redoStack=[];
- resetAdjustments();
- renderPhoto();
- updateDimensions();
- status("Montagem pronta.");
-}
-
 function prepare3x4(){
- if(!imageState)return status("Abra uma foto.");
- snapshot();
- commitFilters();
- const c=document.createElement("canvas");
- c.width=354;c.height=472;
- const x=c.getContext("2d");
- x.fillStyle="white";
- x.fillRect(0,0,c.width,c.height);
- const scale=Math.max(c.width/imageState.width,
- c.height/imageState.height);
- const sw=c.width/scale,sh=c.height/scale;
- x.drawImage(imageState,
- (imageState.width-sw)/2,(imageState.height-sh)/2,
- sw,sh,0,0,c.width,c.height);
- imageState=c;
- renderPhoto();
- updateDimensions();
- status("Foto 3×4 preparada em aproximadamente 300 DPI.");
+ if(!base)return message("Abra uma foto.");
+ snapshot();bakeFilters();
+ const c=createCanvas(354,472),x=c.getContext("2d");
+ x.fillStyle="white";x.fillRect(0,0,354,472);
+ const s=Math.max(354/base.width,472/base.height);
+ const sw=354/s,sh=472/s;
+ x.drawImage(base,(base.width-sw)/2,(base.height-sh)/2,
+ sw,sh,0,0,354,472);
+ base=c;layers=[];render();
+ message("Foto 3×4 preparada.");
 }
-
 function prepareA4(){
- if(!imageState)return status("Abra uma foto.");
- snapshot();
- commitFilters();
- const source=copyCanvas(imageState);
- const c=document.createElement("canvas");
- c.width=2480;c.height=3508;
- const x=c.getContext("2d");
- x.fillStyle="white";
- x.fillRect(0,0,c.width,c.height);
- const margin=100;
- const scale=Math.min(
- (c.width-margin*2)/source.width,
- (c.height-margin*2)/source.height);
- const w=source.width*scale,h=source.height*scale;
- x.drawImage(source,(c.width-w)/2,(c.height-h)/2,w,h);
- imageState=c;
- renderPhoto();
- updateDimensions();
- status("Folha A4 preparada.");
+ if(!base)return message("Abra uma foto.");
+ snapshot();bakeFilters();
+ const c=createCanvas(2480,3508),x=c.getContext("2d");
+ x.fillStyle="white";x.fillRect(0,0,c.width,c.height);
+ const s=Math.min(2280/base.width,3308/base.height);
+ const w=base.width*s,h=base.height*s;
+ x.drawImage(base,(c.width-w)/2,(c.height-h)/2,w,h);
+ layers.forEach(l=>{
+  l.x=(c.width-w)/2+l.x*s;
+  l.y=(c.height-h)/2+l.y*s;l.size*=s;
+ });
+ base=c;render();message("Folha A4 preparada.");
 }
-
-async function printPhoto(){
- if(!imageState)return status("Abra uma foto.");
- const blob=await canvasBlob(canvas,"image/png");
- if(!blob)return status("Falha na impressão.");
- const url=URL.createObjectURL(blob);
+async function printImage(){
+ if(!base)return message("Abra uma imagem.");
+ const blob=await blobOf(canvas),url=URL.createObjectURL(blob);
  const win=window.open("","_blank");
- if(!win){
-  URL.revokeObjectURL(url);
-  return status("Permita pop-ups para imprimir.");
- }
+ if(!win){URL.revokeObjectURL(url);return message("Permita pop-ups.");}
  win.document.write(`<!doctype html><html><head>
- <title>Imprimir — ESTÚDIO PRO</title>
+ <title>ESTÚDIO PRO — Impressão</title>
  <style>@page{size:A4;margin:0}
- body{margin:0;display:flex;align-items:center;
- justify-content:center;min-height:100vh}
+ body{margin:0;min-height:100vh;display:flex;
+ align-items:center;justify-content:center}
  img{max-width:100%;max-height:100vh;object-fit:contain}
- </style></head><body><img id="photo"></body></html>`);
+ </style></head><body><img id="pic"></body></html>`);
  win.document.close();
- const img=win.document.getElementById("photo");
- img.onload=()=>{
-  win.focus();
-  win.print();
+ win.document.getElementById("pic").onload=()=>{
+  win.focus();win.print();
   setTimeout(()=>URL.revokeObjectURL(url),60000);
  };
- img.src=url;
+ win.document.getElementById("pic").src=url;
 }
-
+async function downloadImage(){
+ if(!base)return message("Abra ou crie uma imagem.");
+ const type=$("imageFormat").value;
+ const c=createCanvas(canvas.width,canvas.height),x=c.getContext("2d");
+ if(type==="image/jpeg"){
+  x.fillStyle="white";x.fillRect(0,0,c.width,c.height);
+ }
+ x.drawImage(canvas,0,0);
+ const blob=await blobOf(c,type);
+ download(blob,"estudio-pro."+
+  (type==="image/jpeg"?"jpg":type.split("/")[1]));
+ message("Imagem exportada.");
+}
+async function saveProject(){
+ if(!base)return message("Abra ou crie uma imagem.");
+ try{
+  const data={
+   version:2,base:base.toDataURL("image/png"),
+   original:original?original.toDataURL("image/png"):null,
+   layers,filters
+  };
+  localStorage.setItem("estudio-pro-v2",JSON.stringify(data));
+  message("Projeto salvo neste navegador.");
+ }catch(e){message("Sem espaço para salvar. Exporte a imagem.");}
+}
+function loadDataURL(url){
+ return new Promise((resolve,reject)=>{
+  const img=new Image();
+  img.onload=()=>{
+   const c=createCanvas(img.width,img.height);
+   c.getContext("2d").drawImage(img,0,0);resolve(c);
+  };
+  img.onerror=()=>reject(Error("Projeto inválido."));
+  img.src=url;
+ });
+}
+async function loadProject(){
+ const raw=localStorage.getItem("estudio-pro-v2");
+ if(!raw)return message("Nenhum projeto salvo.");
+ try{
+  const d=JSON.parse(raw);
+  base=await loadDataURL(d.base);
+  original=d.original?await loadDataURL(d.original):copy(base);
+  layers=Array.isArray(d.layers)?d.layers:[];
+  filters={...defaults,...d.filters};
+  history=[];future=[];selected=-1;
+  controls.forEach(([k,,,unit])=>{
+   $("s-"+k).value=filters[k];
+   $("v-"+k).textContent=filters[k]+unit;
+  });
+  openTab("photo");render();message("Projeto restaurado.");
+ }catch(e){message("Não foi possível abrir o projeto.");}
+}
+function newProject(){
+ if(!confirm("Criar novo projeto? Alterações não salvas serão perdidas."))return;
+ base=createCanvas(1080,1080);
+ const x=base.getContext("2d");
+ x.fillStyle="#ffffff";x.fillRect(0,0,1080,1080);
+ original=copy(base);layers=[];selected=-1;
+ history=[];future=[];resetSliders();
+ openTab("design");render();message("Novo projeto criado.");
+}
 function loadVideo(file){
  if(videoURL)URL.revokeObjectURL(videoURL);
  videoURL=URL.createObjectURL(file);
- video.src=videoURL;
- video.load();
+ video.src=videoURL;video.load();
  video.onloadedmetadata=()=>{
   $("startTime").value=0;
   $("endTime").value=video.duration.toFixed(1);
-  details("Vídeo: "+file.name+" | "+
-   video.duration.toFixed(1)+" segundos");
-  status("Vídeo carregado.");
+  message("Vídeo carregado: "+file.name);
  };
- video.onerror=()=>status("O navegador não conseguiu abrir este vídeo.");
- showVideo();
+ video.onerror=()=>message("Vídeo não suportado pelo navegador.");
+ showMedia();
 }
-
-$("speed").addEventListener("change",()=>{
- video.playbackRate=Number($("speed").value);
-});
-
-$("volume").addEventListener("input",()=>{
- video.volume=Number($("volume").value)/100;
-});
-
-function getTrim(){
- if(!videoURL)throw Error("Abra um vídeo primeiro.");
- const start=Number($("startTime").value);
- const end=Number($("endTime").value);
- if(!Number.isFinite(start)||!Number.isFinite(end)||
- start<0||end<=start||end>video.duration+.05){
-  throw Error("Confira os tempos de início e fim.");
+$("speed").onchange=()=>video.playbackRate=+$("speed").value;
+$("volume").oninput=()=>{
+ const v=+$("volume").value/100;
+ if(videoAudioGain)videoAudioGain.gain.value=v;
+ else video.volume=v;
+};
+video.ontimeupdate=()=>{
+ if(!video.duration)return;
+ $("timelineFill").style.width=(video.currentTime/video.duration*100)+"%";
+ if(previewing&&video.currentTime>=+$("endTime").value){
+  video.pause();previewing=false;
  }
+};
+function trimValues(){
+ if(!videoURL)throw Error("Abra um vídeo.");
+ const start=+$("startTime").value,end=+$("endTime").value;
+ if(!Number.isFinite(start)||!Number.isFinite(end)||
+ start<0||end<=start||end>video.duration+.05)
+ throw Error("Tempos de corte inválidos.");
  return {start,end};
 }
-
-function seekVideo(time){
+function seek(time){
  return new Promise((resolve,reject)=>{
   if(Math.abs(video.currentTime-time)<.04)return resolve();
-  const timer=setTimeout(()=>{
-   video.removeEventListener("seeked",done);
-   reject(new Error("Não foi possível posicionar o vídeo."));
-  },8000);
-  function done(){
-   clearTimeout(timer);
-   resolve();
-  }
-  video.addEventListener("seeked",done,{once:true});
+  const timer=setTimeout(()=>reject(Error("Falha ao posicionar vídeo.")),8000);
+  video.addEventListener("seeked",()=>{
+   clearTimeout(timer);resolve();
+  },{once:true});
   video.currentTime=time;
  });
 }
-
 async function previewTrim(){
  try{
-  const {start}=getTrim();
-  trimPreview=true;
-  await seekVideo(start);
-  await video.play();
-  status("Reproduzindo trecho selecionado.");
- }catch(err){status(err.message);}
+  const {start}=trimValues();
+  previewing=true;await seek(start);await video.play();
+ }catch(e){message(e.message)}
 }
-
-video.addEventListener("timeupdate",()=>{
- if(!trimPreview || recording)return;
- const end=Number($("endTime").value);
- if(video.currentTime>=end){
-  video.pause();
-  trimPreview=false;
- }
-});
-
-function wait(ms){
- return new Promise(resolve=>setTimeout(resolve,ms));
-}
-
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
 async function exportVideo(){
  if(recording)return;
- let audioContext=null;
- let stream=null;
- let recorder=null;
- let track=null;
- let source=null;
- let destination=null;
- let chunks=[];
+ let recorder,stream;
  try{
-  const {start,end}=getTrim();
-  if(!window.MediaRecorder || !video.captureStream){
-   throw Error("Este navegador não suporta exportação WEBM.");
-  }
-  const mime=[
-   "video/webm;codecs=vp9,opus",
-   "video/webm;codecs=vp8,opus",
-   "video/webm"
-  ].find(t=>MediaRecorder.isTypeSupported(t));
-  if(!mime)throw Error("Formato WEBM indisponível.");
+  const {start,end}=trimValues();
+  if(!window.MediaRecorder||!video.captureStream)
+   throw Error("Exportação indisponível neste navegador.");
+  const mime=["video/webm;codecs=vp8,opus","video/webm"]
+   .find(t=>MediaRecorder.isTypeSupported(t));
+  if(!mime)throw Error("WEBM não suportado.");
+  recording=true;previewing=false;
+  video.pause();await seek(start);
+  video.playbackRate=+$("speed").value;
 
-  recording=true;
-  trimPreview=false;
-  status("Preparando exportação. Mantenha esta aba aberta.");
-  video.pause();
-  video.playbackRate=Number($("speed").value);
-  await seekVideo(start);
-
-  // A captura usa a reprodução real do vídeo.
-  // O áudio é roteado pelo Web Audio quando suportado.
   stream=video.captureStream();
-  const videoTracks=stream.getVideoTracks();
-  if(!videoTracks.length){
-   await video.play();
-   await wait(150);
-   video.pause();
-   stream=video.captureStream();
+  if(!stream.getVideoTracks().length){
+   await video.play();await wait(150);video.pause();
+   await seek(start);stream=video.captureStream();
   }
+  if(!stream.getVideoTracks().length)
+   throw Error("Captura de vídeo indisponível.");
 
-  let tracks=[...stream.getVideoTracks()];
-  if(!tracks.length)throw Error("Captura de vídeo indisponível.");
-
-  try{
-   audioContext=new (window.AudioContext||
-    window.webkitAudioContext)();
-   source=audioContext.createMediaElementSource(video);
-   destination=audioContext.createMediaStreamDestination();
-   const gain=audioContext.createGain();
-   gain.gain.value=Number($("volume").value)/100;
-   source.connect(gain);
-   gain.connect(destination);
-   gain.connect(audioContext.destination);
-   await audioContext.resume();
-   tracks.push(...destination.stream.getAudioTracks());
-  }catch(audioError){
-   if(audioContext){
-    try{await audioContext.close();}catch(e){}
-    audioContext=null;
-   }
-   tracks.push(...stream.getAudioTracks());
-  }
-
-  const output=new MediaStream(tracks);
-  recorder=new MediaRecorder(output,{
-   mimeType:mime,
-   videoBitsPerSecond:3500000
-  });
-  recorder.ondataavailable=e=>{
-   if(e.data.size)chunks.push(e.data);
-  };
-
-  const completed=new Promise((resolve,reject)=>{
-   recorder.onerror=()=>reject(Error("Falha na gravação."));
+  const chunks=[];
+  recorder=new MediaRecorder(stream,{mimeType:mime});
+  recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  const finished=new Promise((resolve,reject)=>{
    recorder.onstop=resolve;
+   recorder.onerror=()=>reject(Error("Falha ao gravar."));
   });
-
   recorder.start(250);
   await video.play();
-  const expected=(end-start)/video.playbackRate;
-  const startClock=performance.now();
-
-  while(video.currentTime<end-.035 && !video.ended){
-   if(performance.now()-startClock>(expected+12)*1000){
-    throw Error("Tempo limite de exportação excedido.");
-   }
+  message("Exportando. Mantenha a aba aberta.");
+  const limit=performance.now()+((end-start)/video.playbackRate+12)*1000;
+  while(video.currentTime<end-.04&&!video.ended){
+   if(performance.now()>limit)throw Error("Tempo limite excedido.");
    await wait(40);
   }
-
-  video.pause();
-  if(recorder.state!=="inactive")recorder.stop();
-  await completed;
+  video.pause();recorder.stop();await finished;
   const blob=new Blob(chunks,{type:"video/webm"});
-  if(!blob.size)throw Error("Arquivo de vídeo vazio.");
-  downloadBlob(blob,"estudio-pro-video.webm");
-  status("Vídeo WEBM exportado. Confira áudio e sincronização.");
- }catch(err){
-  status("Exportação: "+err.message);
- }finally{
+  if(!blob.size)throw Error("Vídeo vazio.");
+  download(blob,"estudio-pro-video.webm");
+  message("WEBM exportado. Confira áudio e sincronização.");
+ }catch(e){message(e.message)}
+ finally{
   video.pause();
-  if(recorder && recorder.state!=="inactive"){
-   try{recorder.stop();}catch(e){}
+  if(recorder&&recorder.state!=="inactive"){
+   try{recorder.stop()}catch(e){}
   }
   if(stream)stream.getTracks().forEach(t=>t.stop());
-  // A conexão Web Audio permanece para o vídeo carregado.
-  // Fechar o contexto pode interromper o áudio da prévia.
   recording=false;
  }
 }
-
 window.addEventListener("beforeunload",()=>{
  if(videoURL)URL.revokeObjectURL(videoURL);
 });
-
-status("ESTÚDIO PRO V1 iniciado.");
+openTab("photo");
+message("ESTÚDIO PRO V2 pronto.");
 </script>
 </body>
 </html>
