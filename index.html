@@ -1,0 +1,1051 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e1b">
+<title>ESTÚDIO PRO | Foto, Vídeo e Design</title>
+<style>
+:root{
+ --bg:#080e1b;--panel:#111c30;--card:#192740;
+ --line:#30415c;--txt:#f4f7ff;--muted:#a9bad2;
+ --blue:#348aff;--green:#18c89b;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+font-family:Arial,system-ui,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer;border:0;border-radius:11px;
+padding:12px;color:white;background:var(--card)}
+button:hover{filter:brightness(1.2)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:var(--blue);font-weight:bold}
+.green{background:#087d66}
+header{padding:16px 4%;display:flex;align-items:center;
+justify-content:space-between;border-bottom:1px solid var(--line);
+background:#0c1627}
+.logo{font-weight:900;font-size:22px;letter-spacing:.5px}
+.logo span{color:var(--blue)}
+small,.muted{color:var(--muted)}
+main{max-width:1350px;margin:auto;padding:20px}
+.hero{padding:28px;border-radius:20px;
+background:linear-gradient(120deg,#142e60,#17223d 65%,#113c42)}
+.hero h1{font-size:clamp(25px,4vw,42px);margin:0 0 10px}
+.hero p{color:#d3dff5}
+.tools{display:grid;grid-template-columns:repeat(4,1fr);
+gap:12px;margin:20px 0}
+.tool{background:var(--panel);border:1px solid var(--line);
+border-radius:16px;padding:20px 10px;text-align:center;
+min-height:100px}
+.tool .emoji{font-size:28px;margin-bottom:10px}
+.tool strong{display:block}
+.tool small{display:block;margin-top:6px;font-size:11px}
+.tool.active{border-color:var(--blue);background:#18345c}
+.workspace{display:grid;grid-template-columns:265px minmax(0,1fr);
+gap:15px}
+.panel{background:var(--panel);border:1px solid var(--line);
+border-radius:17px;padding:16px;min-width:0}
+h2{margin:0 0 15px;font-size:20px}
+h3{font-size:14px;color:#d9e6fb;margin:18px 0 9px}
+.control{margin-bottom:14px}
+.control label{display:flex;justify-content:space-between;
+gap:8px;font-size:13px;margin-bottom:7px}
+input[type=range]{width:100%;accent-color:var(--blue)}
+input[type=number],input[type=text],select{
+background:#0c1729;color:white;border:1px solid var(--line);
+border-radius:9px;padding:10px;width:100%;min-width:0}
+input[type=file]{display:none}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.full{width:100%;margin-top:9px}
+.stage{min-height:370px;background:#090f1c;border-radius:12px;
+display:flex;align-items:center;justify-content:center;
+overflow:auto;padding:15px;position:relative}
+canvas{max-width:100%;height:auto;display:block}
+video{max-width:100%;max-height:480px;border-radius:9px}
+.empty{text-align:center;color:var(--muted);padding:35px}
+.empty .big{font-size:55px}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar button{font-size:13px}
+.hidden{display:none!important}
+.status{padding:11px;border-radius:10px;background:#102c3b;
+color:#bdece4;margin-top:12px;font-size:13px;min-height:39px}
+footer{text-align:center;padding:30px;color:var(--muted);
+font-size:12px}
+.info{background:#15233b;border:1px solid var(--line);
+border-radius:12px;padding:15px;line-height:1.7}
+.montage-grid{display:grid;grid-template-columns:repeat(2,1fr);
+gap:10px}
+@media(max-width:850px){
+ .workspace{grid-template-columns:1fr}
+ .tools{grid-template-columns:repeat(3,1fr)}
+ .stage{min-height:280px}
+}
+@media(max-width:480px){
+ main{padding:12px}
+ header{padding:13px}
+ .logo{font-size:19px}
+ .hero{padding:20px}
+ .tools{grid-template-columns:repeat(2,1fr)}
+ .tool{padding:15px 6px}
+ .panel{padding:12px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦ ESTÚDIO <span>PRO</span></div>
+ <small>ESTÚDIO DIGITAL V1</small>
+</header>
+
+<main>
+<section class="hero">
+ <h1>Seu estúdio criativo completo</h1>
+ <p>Edite fotos, trabalhe com vídeos, crie montagens
+ e exporte seus projetos em um só lugar.</p>
+ <button class="primary" onclick="chooseFile()">＋ Importar arquivo</button>
+</section>
+
+<nav class="tools" id="tools">
+ <button class="tool active" data-tab="photo">
+  <div class="emoji">🖼️</div><strong>Foto PRO</strong>
+  <small>Editar e melhorar</small>
+ </button>
+ <button class="tool" data-tab="video">
+  <div class="emoji">🎬</div><strong>Vídeo PRO</strong>
+  <small>Cortar e exportar</small>
+ </button>
+ <button class="tool" data-tab="montage">
+  <div class="emoji">🧩</div><strong>Montagem</strong>
+  <small>Juntar imagens</small>
+ </button>
+ <button class="tool" data-tab="convert">
+  <div class="emoji">🔄</div><strong>Conversor</strong>
+  <small>JPG, PNG, WEBP</small>
+ </button>
+ <button class="tool" data-tab="design">
+  <div class="emoji">🎨</div><strong>Design</strong>
+  <small>Texto e formatos</small>
+ </button>
+ <button class="tool" data-tab="print">
+  <div class="emoji">🖨️</div><strong>Impressão</strong>
+  <small>Foto 3×4 e A4</small>
+ </button>
+ <button class="tool" data-tab="audio">
+  <div class="emoji">🎵</div><strong>Áudio</strong>
+  <small>Controle do vídeo</small>
+ </button>
+ <button class="tool" data-tab="ai">
+  <div class="emoji">✨</div><strong>IA PRO</strong>
+  <small>Integração futura</small>
+ </button>
+</nav>
+
+<div class="workspace">
+<aside class="panel">
+<h2 id="panelTitle">Editor de fotos</h2>
+
+<div id="photoControls">
+ <button class="primary full" onclick="chooseFile()">Abrir foto</button>
+ <h3>Ajustes</h3>
+ <div id="sliders"></div>
+ <h3>Transformação</h3>
+ <div class="btns">
+  <button onclick="rotate(-90)">↶ Girar</button>
+  <button onclick="rotate(90)">↷ Girar</button>
+  <button onclick="flip()">⇆ Espelhar</button>
+  <button onclick="resetPhoto()">Restaurar</button>
+  <button onclick="undo()">↩ Desfazer</button>
+  <button onclick="redo()">↪ Refazer</button>
+ </div>
+ <h3>Texto</h3>
+ <input id="photoText" type="text" placeholder="Digite um texto">
+ <div class="control" style="margin-top:9px">
+  <label>Cor do texto</label>
+  <input id="textColor" type="color" value="#ffffff">
+ </div>
+ <button class="full" onclick="addText()">Adicionar texto</button>
+ <h3>Exportar</h3>
+ <select id="photoFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+  <option value="image/webp">WEBP</option>
+ </select>
+ <button class="green full" onclick="savePhoto()">⬇ Baixar imagem</button>
+</div>
+
+<div id="videoControls" class="hidden">
+ <button class="primary full" onclick="chooseFile()">Abrir vídeo</button>
+ <h3>Cortar vídeo por tempo</h3>
+ <div class="control">
+  <label>Início (segundos)</label>
+  <input type="number" id="startTime" value="0" min="0" step=".1">
+ </div>
+ <div class="control">
+  <label>Fim (segundos)</label>
+  <input type="number" id="endTime" value="0" min="0" step=".1">
+ </div>
+ <button class="full" onclick="previewTrim()">▶ Prévia do corte</button>
+ <h3>Velocidade</h3>
+ <select id="speed">
+  <option value=".5">0.5x — Lento</option>
+  <option value="1" selected>1x — Normal</option>
+  <option value="1.5">1.5x — Rápido</option>
+  <option value="2">2x — Muito rápido</option>
+ </select>
+ <h3>Volume</h3>
+ <input type="range" id="volume" min="0" max="100" value="100">
+ <h3>Exportação</h3>
+ <button class="green full" onclick="exportVideo()">⬇ Exportar WEBM</button>
+ <small>Exportação experimental com áudio quando suportado.
+ Requer MediaRecorder, captura de tela do vídeo e Web Audio.</small>
+</div>
+
+<div id="montageControls" class="hidden">
+ <button class="primary full" onclick="selectMontage()">Adicionar fotos</button>
+ <h3>Layout</h3>
+ <select id="montageColumns">
+  <option value="1">Uma coluna</option>
+  <option value="2" selected>Duas colunas</option>
+  <option value="3">Três colunas</option>
+  <option value="4">Quatro colunas</option>
+ </select>
+ <button class="full" onclick="makeMontage()">Gerar montagem</button>
+ <button class="green full" onclick="savePhoto()">⬇ Baixar montagem</button>
+</div>
+
+<div id="convertControls" class="hidden">
+ <button class="primary full" onclick="chooseFile()">Abrir imagem</button>
+ <h3>Dimensões</h3>
+ <div class="control">
+  <label>Largura (pixels)</label>
+  <input type="number" id="newWidth" min="1" max="12000">
+ </div>
+ <div class="control">
+  <label>Altura (pixels)</label>
+  <input type="number" id="newHeight" min="1" max="12000">
+ </div>
+ <label><input type="checkbox" id="keepRatio" checked>
+ Manter proporção</label>
+ <h3>Formato</h3>
+ <select id="convertFormat">
+  <option value="image/jpeg">JPG</option>
+  <option value="image/png">PNG</option>
+  <option value="image/webp">WEBP</option>
+ </select>
+ <button class="green full" onclick="convertImage()">Converter e baixar</button>
+</div>
+
+<div id="designControls" class="hidden">
+ <button class="primary full" onclick="chooseFile()">Abrir imagem</button>
+ <h3>Formato de design</h3>
+ <select id="designSize">
+  <option value="1080x1080">Post quadrado — 1080×1080</option>
+  <option value="1080x1920">Story — 1080×1920</option>
+  <option value="1280x720">Miniatura — 1280×720</option>
+  <option value="1920x1080">Horizontal — 1920×1080</option>
+ </select>
+ <button class="full" onclick="applyDesignSize()">Aplicar formato</button>
+ <h3>Adicionar título</h3>
+ <input type="text" id="designText" placeholder="Título do design">
+ <button class="full" onclick="addDesignText()">Adicionar título</button>
+ <button class="green full" onclick="savePhoto()">Baixar design</button>
+</div>
+
+<div id="printControls" class="hidden">
+ <button class="primary full" onclick="chooseFile()">Abrir foto</button>
+ <h3>Preparação</h3>
+ <button class="full" onclick="prepare3x4()">Foto 3×4 cm</button>
+ <button class="full" onclick="prepareA4()">Organizar na folha A4</button>
+ <button class="green full" onclick="printPhoto()">🖨 Imprimir</button>
+ <small>Confira a escala nas configurações da impressora.</small>
+</div>
+
+<div id="audioControls" class="hidden">
+ <h3>Áudio do vídeo</h3>
+ <p class="muted">Abra um vídeo para controlar o volume,
+ a velocidade e exportar o trecho selecionado.</p>
+ <button class="primary full" onclick="openTab('video')">Abrir editor de vídeo</button>
+</div>
+
+<div id="aiControls" class="hidden">
+ <div class="info">
+  <strong>IA PRO — Em desenvolvimento</strong>
+  <p>Remoção de fundo, restauração, geração de imagens,
+  legendas automáticas e dublagem serão integradas
+  com modelos ou serviços de IA.</p>
+  <small>Essas funções ainda não estão disponíveis nesta versão.</small>
+ </div>
+</div>
+</aside>
+
+<section class="panel">
+ <div class="toolbar">
+  <button onclick="chooseFile()">＋ Importar</button>
+  <button onclick="undo()">↩ Desfazer</button>
+  <button onclick="redo()">↪ Refazer</button>
+  <button onclick="savePhoto()">⬇ Salvar imagem</button>
+ </div>
+
+ <div class="stage" id="stage">
+  <div id="empty" class="empty">
+   <div class="big">✦</div>
+   <h2>Seu projeto começa aqui</h2>
+   <p>Importe uma foto ou vídeo para editar.</p>
+  </div>
+  <canvas id="canvas" class="hidden"></canvas>
+  <video id="video" class="hidden" controls playsinline></video>
+ </div>
+
+ <div class="status" id="status" role="status" aria-live="polite">
+  Pronto para começar.
+ </div>
+ <div style="margin-top:15px">
+  <small id="details">Nenhum arquivo carregado.</small>
+ </div>
+</section>
+</div>
+
+<input type="file" id="fileInput" accept="image/*,video/*">
+<input type="file" id="montageInput" accept="image/*" multiple>
+
+</main>
+
+<footer>
+ESTÚDIO PRO © 2026 — Plataforma de criação digital
+<br>Seus arquivos são processados localmente nas ferramentas desta versão.
+</footer>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+const canvas = $("canvas");
+const ctx = canvas.getContext("2d");
+const video = $("video");
+
+let currentTab = "photo";
+let original = null;
+let imageState = null;
+let undoStack = [];
+let redoStack = [];
+let montageImages = [];
+let videoURL = null;
+let trimPreview = false;
+let recording = false;
+
+const adjustments = {
+ brightness:100,
+ contrast:100,
+ saturation:100,
+ grayscale:0,
+ blur:0
+};
+
+const sliderData = [
+ ["brightness","Brilho",0,200,100,"%"],
+ ["contrast","Contraste",0,200,100,"%"],
+ ["saturation","Saturação",0,200,100,"%"],
+ ["grayscale","Preto e branco",0,100,0,"%"],
+ ["blur","Desfoque",0,15,0,"px"]
+];
+
+function status(message){
+ $("status").textContent = message;
+}
+
+function details(message){
+ $("details").textContent = message;
+}
+
+function buildSliders(){
+ $("sliders").innerHTML = "";
+ sliderData.forEach(([key,label,min,max,val,unit])=>{
+  const div = document.createElement("div");
+  div.className = "control";
+  div.innerHTML = `
+   <label>${label}<span id="value-${key}">${val}${unit}</span></label>
+   <input type="range" id="slider-${key}"
+   min="${min}" max="${max}" value="${val}">`;
+  $("sliders").appendChild(div);
+  $("slider-"+key).addEventListener("input",e=>{
+   adjustments[key] = Number(e.target.value);
+   $("value-"+key).textContent = e.target.value+unit;
+   renderPhoto();
+  });
+ });
+}
+buildSliders();
+
+const tabs = [
+ "photo","video","montage","convert",
+ "design","print","audio","ai"
+];
+
+const titles = {
+ photo:"Editor de fotos",
+ video:"Editor de vídeos",
+ montage:"Montagem de fotos",
+ convert:"Conversor de imagens",
+ design:"Editor de design",
+ print:"Preparação para impressão",
+ audio:"Ferramentas de áudio",
+ ai:"Inteligência artificial"
+};
+
+document.querySelectorAll("[data-tab]").forEach(btn=>{
+ btn.addEventListener("click",()=>openTab(btn.dataset.tab));
+});
+
+function openTab(tab){
+ currentTab = tab;
+ tabs.forEach(t=>{
+  $(t+"Controls").classList.toggle("hidden",t!==tab);
+ });
+ document.querySelectorAll("[data-tab]").forEach(btn=>{
+  btn.classList.toggle("active",btn.dataset.tab===tab);
+ });
+ $("panelTitle").textContent = titles[tab];
+
+ if(tab==="video" || tab==="audio"){
+  showVideo();
+ }else{
+  showCanvas();
+ }
+ status("Módulo "+titles[tab]+" selecionado.");
+}
+
+function showCanvas(){
+ video.pause();
+ video.classList.add("hidden");
+ if(imageState){
+  canvas.classList.remove("hidden");
+  $("empty").classList.add("hidden");
+ }else{
+  canvas.classList.add("hidden");
+  $("empty").classList.remove("hidden");
+ }
+}
+
+function showVideo(){
+ canvas.classList.add("hidden");
+ if(videoURL){
+  video.classList.remove("hidden");
+  $("empty").classList.add("hidden");
+ }else{
+  video.classList.add("hidden");
+  $("empty").classList.remove("hidden");
+ }
+}
+
+function chooseFile(){
+ $("fileInput").value="";
+ $("fileInput").click();
+}
+
+$("fileInput").addEventListener("change",async e=>{
+ const file=e.target.files[0];
+ if(!file)return;
+ if(file.type.startsWith("image/")){
+  await loadImage(file);
+  if(currentTab==="video" || currentTab==="audio")openTab("photo");
+ }else if(file.type.startsWith("video/")){
+  loadVideo(file);
+  openTab("video");
+ }else{
+  status("Formato não suportado.");
+ }
+});
+
+function imageFromFile(file){
+ return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{
+   URL.revokeObjectURL(url);
+   resolve(img);
+  };
+  img.onerror=()=>{
+   URL.revokeObjectURL(url);
+   reject(new Error("Não foi possível abrir a imagem."));
+  };
+  img.src=url;
+ });
+}
+
+function copyCanvas(source){
+ const c=document.createElement("canvas");
+ c.width=source.width;
+ c.height=source.height;
+ c.getContext("2d").drawImage(source,0,0);
+ return c;
+}
+
+function createImageCanvas(img){
+ const c=document.createElement("canvas");
+ c.width=img.naturalWidth;
+ c.height=img.naturalHeight;
+ c.getContext("2d").drawImage(img,0,0);
+ return c;
+}
+
+async function loadImage(file){
+ try{
+  const img=await imageFromFile(file);
+  original=createImageCanvas(img);
+  imageState=copyCanvas(original);
+  undoStack=[];
+  redoStack=[];
+  resetAdjustments();
+  renderPhoto();
+  showCanvas();
+  updateDimensions();
+  status("Imagem carregada: "+file.name);
+ }catch(err){
+  status(err.message);
+ }
+}
+
+function updateDimensions(){
+ if(!imageState)return;
+ $("newWidth").value=imageState.width;
+ $("newHeight").value=imageState.height;
+ details(imageState.width+" × "+imageState.height+" pixels");
+}
+
+function filterString(){
+ return `brightness(${adjustments.brightness}%)
+ contrast(${adjustments.contrast}%)
+ saturate(${adjustments.saturation}%)
+ grayscale(${adjustments.grayscale}%)
+ blur(${adjustments.blur}px)`;
+}
+
+function renderPhoto(){
+ if(!imageState)return;
+ canvas.width=imageState.width;
+ canvas.height=imageState.height;
+ ctx.clearRect(0,0,canvas.width,canvas.height);
+ ctx.filter=filterString();
+ ctx.drawImage(imageState,0,0);
+ ctx.filter="none";
+ showCanvas();
+}
+
+function resetAdjustments(){
+ sliderData.forEach(([key,,min,max,val,unit])=>{
+  adjustments[key]=val;
+  $("slider-"+key).value=val;
+  $("value-"+key).textContent=val+unit;
+ });
+}
+
+function snapshot(){
+ if(!imageState)return;
+ undoStack.push(copyCanvas(imageState));
+ if(undoStack.length>15)undoStack.shift();
+ redoStack=[];
+}
+
+function commitFilters(){
+ if(!imageState)return;
+ const c=document.createElement("canvas");
+ c.width=imageState.width;
+ c.height=imageState.height;
+ const cctx=c.getContext("2d");
+ cctx.filter=filterString();
+ cctx.drawImage(imageState,0,0);
+ imageState=c;
+ resetAdjustments();
+}
+
+function undo(){
+ if(!undoStack.length){
+  status("Nenhuma alteração para desfazer.");
+  return;
+ }
+ redoStack.push(copyCanvas(imageState));
+ imageState=undoStack.pop();
+ resetAdjustments();
+ renderPhoto();
+ updateDimensions();
+ status("Alteração desfeita.");
+}
+
+function redo(){
+ if(!redoStack.length){
+  status("Nenhuma alteração para refazer.");
+  return;
+ }
+ undoStack.push(copyCanvas(imageState));
+ imageState=redoStack.pop();
+ resetAdjustments();
+ renderPhoto();
+ updateDimensions();
+ status("Alteração refeita.");
+}
+
+function rotate(deg){
+ if(!imageState)return status("Abra uma foto primeiro.");
+ snapshot();
+ commitFilters();
+ const c=document.createElement("canvas");
+ c.width=imageState.height;
+ c.height=imageState.width;
+ const x=c.getContext("2d");
+ x.translate(c.width/2,c.height/2);
+ x.rotate(deg*Math.PI/180);
+ x.drawImage(imageState,-imageState.width/2,-imageState.height/2);
+ imageState=c;
+ renderPhoto();
+ updateDimensions();
+}
+
+function flip(){
+ if(!imageState)return status("Abra uma foto primeiro.");
+ snapshot();
+ commitFilters();
+ const c=document.createElement("canvas");
+ c.width=imageState.width;
+ c.height=imageState.height;
+ const x=c.getContext("2d");
+ x.translate(c.width,0);
+ x.scale(-1,1);
+ x.drawImage(imageState,0,0);
+ imageState=c;
+ renderPhoto();
+}
+
+function resetPhoto(){
+ if(!original)return status("Nenhuma foto original.");
+ snapshot();
+ imageState=copyCanvas(original);
+ resetAdjustments();
+ renderPhoto();
+ updateDimensions();
+ status("Foto original restaurada.");
+}
+
+function addText(){
+ addTextValue($("photoText").value,$("textColor").value);
+}
+
+function addDesignText(){
+ addTextValue($("designText").value,"#ffffff");
+}
+
+function addTextValue(text,color){
+ if(!imageState)return status("Abra uma imagem primeiro.");
+ if(!text.trim())return status("Digite o texto.");
+ snapshot();
+ commitFilters();
+ const x=imageState.getContext("2d");
+ const size=Math.max(16,Math.round(imageState.width*.055));
+ x.font=`bold ${size}px Arial`;
+ x.textAlign="center";
+ x.textBaseline="middle";
+ x.lineWidth=Math.max(2,size/10);
+ x.strokeStyle="#000000";
+ x.fillStyle=color;
+ const lines=text.trim().split("\n");
+ lines.forEach((line,i)=>{
+  const y=imageState.height/2+i*size*1.2;
+  x.strokeText(line,imageState.width/2,y,imageState.width*.9);
+  x.fillText(line,imageState.width/2,y,imageState.width*.9);
+ });
+ renderPhoto();
+ status("Texto adicionado à imagem.");
+}
+
+function downloadBlob(blob,name){
+ if(!blob)return status("Falha ao gerar arquivo.");
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;
+ a.download=name;
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+
+function canvasBlob(c,type,quality=.92){
+ return new Promise(resolve=>c.toBlob(resolve,type,quality));
+}
+
+async function savePhoto(){
+ if(!imageState)return status("Abra ou crie uma imagem primeiro.");
+ const type=$("photoFormat").value;
+ const ext=type.split("/")[1].replace("jpeg","jpg");
+ const blob=await canvasBlob(canvas,type);
+ downloadBlob(blob,"estudio-pro."+ext);
+ status("Imagem exportada.");
+}
+
+$("newWidth").addEventListener("input",()=>{
+ if(!imageState || !$("keepRatio").checked)return;
+ const w=Number($("newWidth").value);
+ if(w>0)$("newHeight").value=Math.round(
+ w*imageState.height/imageState.width);
+});
+
+$("newHeight").addEventListener("input",()=>{
+ if(!imageState || !$("keepRatio").checked)return;
+ const h=Number($("newHeight").value);
+ if(h>0)$("newWidth").value=Math.round(
+ h*imageState.width/imageState.height);
+});
+
+async function convertImage(){
+ if(!imageState)return status("Abra uma imagem.");
+ const w=Number($("newWidth").value);
+ const h=Number($("newHeight").value);
+ if(!Number.isInteger(w)||!Number.isInteger(h)||
+ w<1||h<1||w>12000||h>12000){
+  return status("Dimensões inválidas.");
+ }
+ const c=document.createElement("canvas");
+ c.width=w;c.height=h;
+ const x=c.getContext("2d");
+ const type=$("convertFormat").value;
+ if(type==="image/jpeg"){
+  x.fillStyle="white";
+  x.fillRect(0,0,w,h);
+ }
+ x.drawImage(canvas,0,0,w,h);
+ const blob=await canvasBlob(c,type);
+ const ext=type==="image/jpeg"?"jpg":type.split("/")[1];
+ downloadBlob(blob,"estudio-pro-convertido."+ext);
+ status("Imagem convertida.");
+}
+
+function applyDesignSize(){
+ if(!imageState)return status("Abra uma imagem.");
+ snapshot();
+ commitFilters();
+ const [w,h]=$("designSize").value.split("x").map(Number);
+ const c=document.createElement("canvas");
+ c.width=w;c.height=h;
+ const x=c.getContext("2d");
+ x.fillStyle="#15233b";
+ x.fillRect(0,0,w,h);
+ const scale=Math.min(w/imageState.width,h/imageState.height);
+ const dw=imageState.width*scale;
+ const dh=imageState.height*scale;
+ x.drawImage(imageState,(w-dw)/2,(h-dh)/2,dw,dh);
+ imageState=c;
+ renderPhoto();
+ updateDimensions();
+ status("Formato aplicado.");
+}
+
+function selectMontage(){
+ $("montageInput").value="";
+ $("montageInput").click();
+}
+
+$("montageInput").addEventListener("change",async e=>{
+ try{
+  const files=Array.from(e.target.files).filter(f=>
+   f.type.startsWith("image/"));
+  if(!files.length)return;
+  montageImages=await Promise.all(files.map(imageFromFile));
+  status(montageImages.length+" fotos adicionadas.");
+  await makeMontage();
+ }catch(err){
+  status("Erro ao carregar fotos: "+err.message);
+ }
+});
+
+async function makeMontage(){
+ if(!montageImages.length)return status("Adicione fotos.");
+ const cols=Number($("montageColumns").value);
+ const rows=Math.ceil(montageImages.length/cols);
+ const cellW=500,cellH=500,gap=12;
+ const c=document.createElement("canvas");
+ c.width=cols*cellW+(cols+1)*gap;
+ c.height=rows*cellH+(rows+1)*gap;
+ const x=c.getContext("2d");
+ x.fillStyle="#ffffff";
+ x.fillRect(0,0,c.width,c.height);
+
+ montageImages.forEach((img,i)=>{
+  const col=i%cols,row=Math.floor(i/cols);
+  const px=gap+col*(cellW+gap);
+  const py=gap+row*(cellH+gap);
+  const scale=Math.max(cellW/img.width,cellH/img.height);
+  const sw=cellW/scale,sh=cellH/scale;
+  const sx=(img.width-sw)/2,sy=(img.height-sh)/2;
+  x.drawImage(img,sx,sy,sw,sh,px,py,cellW,cellH);
+ });
+ snapshot();
+ imageState=c;
+ original=copyCanvas(c);
+ undoStack=[];redoStack=[];
+ resetAdjustments();
+ renderPhoto();
+ updateDimensions();
+ status("Montagem pronta.");
+}
+
+function prepare3x4(){
+ if(!imageState)return status("Abra uma foto.");
+ snapshot();
+ commitFilters();
+ const c=document.createElement("canvas");
+ c.width=354;c.height=472;
+ const x=c.getContext("2d");
+ x.fillStyle="white";
+ x.fillRect(0,0,c.width,c.height);
+ const scale=Math.max(c.width/imageState.width,
+ c.height/imageState.height);
+ const sw=c.width/scale,sh=c.height/scale;
+ x.drawImage(imageState,
+ (imageState.width-sw)/2,(imageState.height-sh)/2,
+ sw,sh,0,0,c.width,c.height);
+ imageState=c;
+ renderPhoto();
+ updateDimensions();
+ status("Foto 3×4 preparada em aproximadamente 300 DPI.");
+}
+
+function prepareA4(){
+ if(!imageState)return status("Abra uma foto.");
+ snapshot();
+ commitFilters();
+ const source=copyCanvas(imageState);
+ const c=document.createElement("canvas");
+ c.width=2480;c.height=3508;
+ const x=c.getContext("2d");
+ x.fillStyle="white";
+ x.fillRect(0,0,c.width,c.height);
+ const margin=100;
+ const scale=Math.min(
+ (c.width-margin*2)/source.width,
+ (c.height-margin*2)/source.height);
+ const w=source.width*scale,h=source.height*scale;
+ x.drawImage(source,(c.width-w)/2,(c.height-h)/2,w,h);
+ imageState=c;
+ renderPhoto();
+ updateDimensions();
+ status("Folha A4 preparada.");
+}
+
+async function printPhoto(){
+ if(!imageState)return status("Abra uma foto.");
+ const blob=await canvasBlob(canvas,"image/png");
+ if(!blob)return status("Falha na impressão.");
+ const url=URL.createObjectURL(blob);
+ const win=window.open("","_blank");
+ if(!win){
+  URL.revokeObjectURL(url);
+  return status("Permita pop-ups para imprimir.");
+ }
+ win.document.write(`<!doctype html><html><head>
+ <title>Imprimir — ESTÚDIO PRO</title>
+ <style>@page{size:A4;margin:0}
+ body{margin:0;display:flex;align-items:center;
+ justify-content:center;min-height:100vh}
+ img{max-width:100%;max-height:100vh;object-fit:contain}
+ </style></head><body><img id="photo"></body></html>`);
+ win.document.close();
+ const img=win.document.getElementById("photo");
+ img.onload=()=>{
+  win.focus();
+  win.print();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
+ };
+ img.src=url;
+}
+
+function loadVideo(file){
+ if(videoURL)URL.revokeObjectURL(videoURL);
+ videoURL=URL.createObjectURL(file);
+ video.src=videoURL;
+ video.load();
+ video.onloadedmetadata=()=>{
+  $("startTime").value=0;
+  $("endTime").value=video.duration.toFixed(1);
+  details("Vídeo: "+file.name+" | "+
+   video.duration.toFixed(1)+" segundos");
+  status("Vídeo carregado.");
+ };
+ video.onerror=()=>status("O navegador não conseguiu abrir este vídeo.");
+ showVideo();
+}
+
+$("speed").addEventListener("change",()=>{
+ video.playbackRate=Number($("speed").value);
+});
+
+$("volume").addEventListener("input",()=>{
+ video.volume=Number($("volume").value)/100;
+});
+
+function getTrim(){
+ if(!videoURL)throw Error("Abra um vídeo primeiro.");
+ const start=Number($("startTime").value);
+ const end=Number($("endTime").value);
+ if(!Number.isFinite(start)||!Number.isFinite(end)||
+ start<0||end<=start||end>video.duration+.05){
+  throw Error("Confira os tempos de início e fim.");
+ }
+ return {start,end};
+}
+
+function seekVideo(time){
+ return new Promise((resolve,reject)=>{
+  if(Math.abs(video.currentTime-time)<.04)return resolve();
+  const timer=setTimeout(()=>{
+   video.removeEventListener("seeked",done);
+   reject(new Error("Não foi possível posicionar o vídeo."));
+  },8000);
+  function done(){
+   clearTimeout(timer);
+   resolve();
+  }
+  video.addEventListener("seeked",done,{once:true});
+  video.currentTime=time;
+ });
+}
+
+async function previewTrim(){
+ try{
+  const {start}=getTrim();
+  trimPreview=true;
+  await seekVideo(start);
+  await video.play();
+  status("Reproduzindo trecho selecionado.");
+ }catch(err){status(err.message);}
+}
+
+video.addEventListener("timeupdate",()=>{
+ if(!trimPreview || recording)return;
+ const end=Number($("endTime").value);
+ if(video.currentTime>=end){
+  video.pause();
+  trimPreview=false;
+ }
+});
+
+function wait(ms){
+ return new Promise(resolve=>setTimeout(resolve,ms));
+}
+
+async function exportVideo(){
+ if(recording)return;
+ let audioContext=null;
+ let stream=null;
+ let recorder=null;
+ let track=null;
+ let source=null;
+ let destination=null;
+ let chunks=[];
+ try{
+  const {start,end}=getTrim();
+  if(!window.MediaRecorder || !video.captureStream){
+   throw Error("Este navegador não suporta exportação WEBM.");
+  }
+  const mime=[
+   "video/webm;codecs=vp9,opus",
+   "video/webm;codecs=vp8,opus",
+   "video/webm"
+  ].find(t=>MediaRecorder.isTypeSupported(t));
+  if(!mime)throw Error("Formato WEBM indisponível.");
+
+  recording=true;
+  trimPreview=false;
+  status("Preparando exportação. Mantenha esta aba aberta.");
+  video.pause();
+  video.playbackRate=Number($("speed").value);
+  await seekVideo(start);
+
+  // A captura usa a reprodução real do vídeo.
+  // O áudio é roteado pelo Web Audio quando suportado.
+  stream=video.captureStream();
+  const videoTracks=stream.getVideoTracks();
+  if(!videoTracks.length){
+   await video.play();
+   await wait(150);
+   video.pause();
+   stream=video.captureStream();
+  }
+
+  let tracks=[...stream.getVideoTracks()];
+  if(!tracks.length)throw Error("Captura de vídeo indisponível.");
+
+  try{
+   audioContext=new (window.AudioContext||
+    window.webkitAudioContext)();
+   source=audioContext.createMediaElementSource(video);
+   destination=audioContext.createMediaStreamDestination();
+   const gain=audioContext.createGain();
+   gain.gain.value=Number($("volume").value)/100;
+   source.connect(gain);
+   gain.connect(destination);
+   gain.connect(audioContext.destination);
+   await audioContext.resume();
+   tracks.push(...destination.stream.getAudioTracks());
+  }catch(audioError){
+   if(audioContext){
+    try{await audioContext.close();}catch(e){}
+    audioContext=null;
+   }
+   tracks.push(...stream.getAudioTracks());
+  }
+
+  const output=new MediaStream(tracks);
+  recorder=new MediaRecorder(output,{
+   mimeType:mime,
+   videoBitsPerSecond:3500000
+  });
+  recorder.ondataavailable=e=>{
+   if(e.data.size)chunks.push(e.data);
+  };
+
+  const completed=new Promise((resolve,reject)=>{
+   recorder.onerror=()=>reject(Error("Falha na gravação."));
+   recorder.onstop=resolve;
+  });
+
+  recorder.start(250);
+  await video.play();
+  const expected=(end-start)/video.playbackRate;
+  const startClock=performance.now();
+
+  while(video.currentTime<end-.035 && !video.ended){
+   if(performance.now()-startClock>(expected+12)*1000){
+    throw Error("Tempo limite de exportação excedido.");
+   }
+   await wait(40);
+  }
+
+  video.pause();
+  if(recorder.state!=="inactive")recorder.stop();
+  await completed;
+  const blob=new Blob(chunks,{type:"video/webm"});
+  if(!blob.size)throw Error("Arquivo de vídeo vazio.");
+  downloadBlob(blob,"estudio-pro-video.webm");
+  status("Vídeo WEBM exportado. Confira áudio e sincronização.");
+ }catch(err){
+  status("Exportação: "+err.message);
+ }finally{
+  video.pause();
+  if(recorder && recorder.state!=="inactive"){
+   try{recorder.stop();}catch(e){}
+  }
+  if(stream)stream.getTracks().forEach(t=>t.stop());
+  // A conexão Web Audio permanece para o vídeo carregado.
+  // Fechar o contexto pode interromper o áudio da prévia.
+  recording=false;
+ }
+}
+
+window.addEventListener("beforeunload",()=>{
+ if(videoURL)URL.revokeObjectURL(videoURL);
+});
+
+status("ESTÚDIO PRO V1 iniciado.");
+</script>
+</body>
+</html>
