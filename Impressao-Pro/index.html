@@ -1,0 +1,642 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e1b">
+<title>ESTÚDIO PRO | Impressão PRO</title>
+<style>
+:root{
+ color-scheme:dark;
+ --bg:#080e1b;--panel:#121e32;--card:#1b2c47;
+ --line:#304663;--blue:#388bff;--green:#07866b;
+ --muted:#a9bad3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#f5f8ff;
+ font-family:Arial,system-ui,sans-serif}
+button,input,select{font:inherit}
+button{background:var(--card);color:white;
+ border:1px solid var(--line);border-radius:9px;
+ padding:10px;cursor:pointer}
+button:hover{filter:brightness(1.13)}
+button:disabled{opacity:.45;cursor:not-allowed}
+input[type=number],input[type=text],select{
+ width:100%;background:#0b1628;color:white;
+ border:1px solid var(--line);border-radius:8px;padding:9px}
+input[type=range]{width:100%;accent-color:var(--blue)}
+input[type=file]{display:none}
+input[type=color]{width:100%;height:38px}
+a{color:#b5d5ff}
+.primary{background:var(--blue);border-color:var(--blue)}
+.success{background:var(--green)}
+.danger{background:#75323e}
+.full{width:100%}
+header{padding:14px 2%;background:#101b2d;
+ border-bottom:1px solid var(--line);
+ display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:21px;font-weight:900}
+.logo span{color:var(--blue)}
+main{max-width:1800px;margin:auto;padding:12px}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.layout{display:grid;
+ grid-template-columns:270px minmax(0,1fr) 250px;
+ gap:11px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);
+ border-radius:13px;padding:13px;min-width:0}
+h2{font-size:18px;margin:0 0 12px}
+h3{font-size:14px;margin:17px 0 9px}
+.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.control{margin:12px 0}
+.control label{display:flex;justify-content:space-between;
+ gap:8px;font-size:12px;margin-bottom:6px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stage{background:#070c15;min-height:430px;
+ border-radius:11px;display:flex;align-items:center;
+ justify-content:center;overflow:auto;padding:15px}
+#page{display:block;max-width:100%;max-height:72vh;
+ width:auto;height:auto;background:white;
+ box-shadow:0 8px 35px #000a;touch-action:none}
+.status{background:#123647;border:1px solid #2b5b70;
+ color:#c4f4e9;border-radius:9px;padding:11px;
+ margin-top:11px;font-size:12px;overflow-wrap:anywhere}
+.photo{display:flex;align-items:center;gap:8px;
+ border:1px solid var(--line);border-radius:9px;
+ padding:7px;margin:7px 0}
+.photo.active{border-color:var(--blue);background:#203a5b}
+.photo img{width:45px;height:45px;object-fit:cover;
+ border-radius:6px}
+.photo span{flex:1;min-width:0;overflow:hidden;
+ text-overflow:ellipsis;font-size:12px}
+.photo button{padding:6px;font-size:12px}
+.note{background:#1b2b43;border-radius:9px;padding:11px;
+ font-size:12px;color:var(--muted);line-height:1.5}
+@media(max-width:1100px){
+ .layout{grid-template-columns:250px minmax(0,1fr)}
+ .right{grid-column:1/-1}
+}
+@media(max-width:720px){
+ .layout{grid-template-columns:1fr}
+ .right{grid-column:auto}
+ .stage{min-height:300px}
+ header .logo{font-size:17px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦ ESTÚDIO <span>PRO</span> / IMPRESSÃO</div>
+ <a href="../index.html">← Início</a>
+</header>
+
+<main>
+<div class="toolbar">
+ <button class="primary" onclick="choosePhotos()">＋ Importar fotos</button>
+ <button onclick="newProject()">Novo projeto</button>
+ <button onclick="undo()">↶ Desfazer</button>
+ <button onclick="redo()">↷ Refazer</button>
+ <button onclick="saveProject()">💾 Salvar projeto</button>
+ <button onclick="openProject()">📂 Abrir projeto</button>
+ <button onclick="printPage()" class="success">🖨️ Imprimir</button>
+ <button onclick="exportPDF()">⬇ PDF</button>
+</div>
+
+<div class="layout">
+<aside class="panel">
+ <h2>Impressão profissional</h2>
+ <button class="primary full" onclick="choosePhotos()">Abrir fotos</button>
+
+ <h3>Tamanho do papel</h3>
+ <select id="paper" onchange="update()">
+  <option value="210x297">A4 — 21 × 29,7 cm</option>
+  <option value="297x420">A3 — 29,7 × 42 cm</option>
+  <option value="148x210">A5 — 14,8 × 21 cm</option>
+  <option value="215.9x279.4">Carta</option>
+  <option value="215.9x330.2">Ofício</option>
+ </select>
+
+ <h3>Orientação</h3>
+ <select id="orientation" onchange="update()">
+  <option value="portrait">Retrato</option>
+  <option value="landscape">Paisagem</option>
+ </select>
+
+ <h3>Tamanho da foto</h3>
+ <select id="photoSize" onchange="update()">
+  <option value="30x40">Foto 3×4 cm</option>
+  <option value="50x70">Foto 5×7 cm</option>
+  <option value="50.8x50.8">Foto 2×2 polegadas</option>
+  <option value="100x150">Foto 10×15 cm</option>
+  <option value="custom">Personalizado</option>
+ </select>
+
+ <div id="customFields" hidden>
+  <div class="two">
+   <div class="control">
+    <label>Largura (cm)</label>
+    <input id="customW" type="number" min=".1" max="100" step=".1" value="3" onchange="update()">
+   </div>
+   <div class="control">
+    <label>Altura (cm)</label>
+    <input id="customH" type="number" min=".1" max="100" step=".1" value="4" onchange="update()">
+   </div>
+  </div>
+ </div>
+
+ <h3>Distribuição</h3>
+ <select id="layoutMode" onchange="update()">
+  <option value="repeat">Repetir foto selecionada</option>
+  <option value="sequence">Distribuir todas as fotos</option>
+  <option value="single">Uma foto por folha</option>
+ </select>
+
+ <div class="control">
+  <label>Quantidade de cópias</label>
+  <input id="copies" type="number" min="1" max="100" value="8" onchange="update()">
+ </div>
+
+ <div class="control">
+  <label>Margem (mm)</label>
+  <input id="margin" type="number" min="0" max="50" value="10" step=".5" onchange="update()">
+ </div>
+
+ <div class="control">
+  <label>Espaçamento (mm)</label>
+  <input id="gap" type="number" min="0" max="50" value="3" step=".5" onchange="update()">
+ </div>
+
+ <h3>Enquadramento</h3>
+ <select id="fit" onchange="update()">
+  <option value="cover">Preencher e cortar</option>
+  <option value="contain">Mostrar imagem inteira</option>
+ </select>
+
+ <h3>Qualidade</h3>
+ <select id="dpi" onchange="update()">
+  <option value="150">150 DPI</option>
+  <option value="300" selected>300 DPI</option>
+  <option value="600">600 DPI</option>
+ </select>
+
+ <h3>Marcas de corte</h3>
+ <label class="muted">
+  <input id="cropMarks" type="checkbox" checked onchange="update()">
+  Mostrar marcas de corte
+ </label>
+
+ <h3>Frente e verso</h3>
+ <select id="side" onchange="update()">
+  <option value="front">Frente</option>
+  <option value="back">Verso</option>
+ </select>
+ <p class="muted">No verso, a ordem das fotos é espelhada horizontalmente para auxiliar o alinhamento. Confira o modo de virada da impressora.</p>
+
+ <button class="success full" onclick="printPage()">🖨️ Imprimir agora</button>
+</aside>
+
+<section class="panel">
+ <div class="stage">
+  <canvas id="page" width="794" height="1123"></canvas>
+ </div>
+ <div class="status" id="status" role="status" aria-live="polite">
+  Impressão PRO pronto. Importe suas fotos.
+ </div>
+ <p class="muted" id="pageInfo">Folha A4 • 300 DPI</p>
+ <div class="two">
+  <button onclick="changePage(-1)">← Página anterior</button>
+  <button onclick="changePage(1)">Próxima página →</button>
+ </div>
+</section>
+
+<aside class="panel right">
+ <h2>Fotos importadas</h2>
+ <div id="photoList"></div>
+
+ <h3>Foto selecionada</h3>
+ <div class="two">
+  <button onclick="rotateSelected(-90)">↶ Girar</button>
+  <button onclick="rotateSelected(90)">↷ Girar</button>
+  <button onclick="moveSelected(-1)">↑ Subir</button>
+  <button onclick="moveSelected(1)">↓ Descer</button>
+  <button onclick="duplicateSelected()">Duplicar</button>
+  <button class="danger" onclick="deleteSelected()">Excluir</button>
+ </div>
+
+ <div class="control">
+  <label>Zoom <span id="zoomValue">100%</span></label>
+  <input id="zoom" type="range" min="100" max="300" value="100" oninput="setZoom(this.value)">
+ </div>
+
+ <h3>Exportar imagem</h3>
+ <select id="exportFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+ </select>
+ <button class="success full" style="margin-top:8px" onclick="exportImage()">⬇ Baixar página</button>
+ <button class="full" style="margin-top:8px" onclick="exportPDF()">⬇ Baixar PDF completo</button>
+
+ <h3>Informações</h3>
+ <div class="note" id="summary">Nenhuma imagem carregada.</div>
+ <p class="muted">
+  Para imprimir em tamanho real, selecione escala 100% na janela da impressora. Evite "Ajustar à página".
+ </p>
+</aside>
+</div>
+
+<input id="photoInput" type="file" accept="image/*" multiple>
+<input id="projectInput" type="file" accept=".json,application/json">
+</main>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const canvas=$("page"),ctx=canvas.getContext("2d");
+const MM_PER_INCH=25.4;
+let photos=[],selected=-1,currentPage=0;
+let history=[],future=[],nextId=1,busy=false;
+let pdfLib=null;
+
+function msg(s){$("status").textContent=s}
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function mmToPx(mm,dpi){return Math.round(mm/MM_PER_INCH*dpi)}
+function paperSize(){
+ let [w,h]=$("paper").value.split("x").map(Number);
+ if($("orientation").value==="landscape")return [h,w];
+ return [w,h];
+}
+function photoDimensions(){
+ if($("photoSize").value==="custom"){
+  return [+$("customW").value*10,+$("customH").value*10];
+ }
+ return $("photoSize").value.split("x").map(Number);
+}
+function settings(){
+ return {
+  paper:$("paper").value,orientation:$("orientation").value,
+  photoSize:$("photoSize").value,
+  customW:$("customW").value,customH:$("customH").value,
+  layoutMode:$("layoutMode").value,copies:$("copies").value,
+  margin:$("margin").value,gap:$("gap").value,
+  fit:$("fit").value,dpi:$("dpi").value,
+  cropMarks:$("cropMarks").checked,side:$("side").value
+ };
+}
+function applySettings(s){
+ for(const [key,value] of Object.entries(s)){
+  const el=$(key);
+  if(!el)continue;
+  if(el.type==="checkbox")el.checked=!!value;
+  else el.value=value;
+ }
+}
+function state(){
+ return {photos:photos.map(p=>({
+  id:p.id,name:p.name,src:p.src,
+  rotation:p.rotation,zoom:p.zoom
+ })),settings:settings()};
+}
+function snapshot(){
+ history.push(state());
+ if(history.length>25)history.shift();
+ future=[];
+}
+function loadImage(src){
+ return new Promise((resolve,reject)=>{
+  const im=new Image();
+  im.onload=()=>resolve(im);
+  im.onerror=()=>reject(Error("Imagem inválida"));
+  im.src=src;
+ });
+}
+async function restore(s){
+ const restored=[];
+ for(const p of s.photos){
+  restored.push({...p,img:await loadImage(p.src)});
+ }
+ photos=restored;
+ applySettings(s.settings);
+ nextId=Math.max(nextId,...photos.map(p=>p.id+1),1);
+ selected=photos.length?0:-1;
+ currentPage=0;
+ update();
+}
+async function undo(){
+ if(!history.length)return msg("Nada para desfazer.");
+ future.push(state());
+ await restore(history.pop());
+ msg("Desfeito.");
+}
+async function redo(){
+ if(!future.length)return msg("Nada para refazer.");
+ history.push(state());
+ await restore(future.pop());
+ msg("Refeito.");
+}
+function choosePhotos(){
+ if(busy)return;
+ $("photoInput").value="";
+ $("photoInput").click();
+}
+$("photoInput").onchange=async e=>{
+ snapshot();
+ for(const file of e.target.files){
+  if(!file.type.startsWith("image/"))continue;
+  try{
+   const src=await new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve(reader.result);
+    reader.onerror=()=>reject(Error("Falha na leitura"));
+    reader.readAsDataURL(file);
+   });
+   const img=await loadImage(src);
+   photos.push({
+    id:nextId++,name:file.name,src,img,
+    rotation:0,zoom:1
+   });
+  }catch(err){msg("Falha em "+file.name)}
+ }
+ if(selected<0&&photos.length)selected=0;
+ update();
+ msg(photos.length+" foto(s) importada(s).");
+};
+function renderPhotos(){
+ $("photoList").replaceChildren();
+ photos.forEach((p,i)=>{
+  const row=document.createElement("div");
+  row.className="photo"+(selected===i?" active":"");
+  const img=document.createElement("img");img.src=p.src;
+  const name=document.createElement("span");name.textContent=p.name;
+  const btn=document.createElement("button");
+  btn.textContent="Selecionar";
+  btn.onclick=()=>{
+   selected=i;
+   $("zoom").value=Math.round(p.zoom*100);
+   $("zoomValue").textContent=Math.round(p.zoom*100)+"%";
+   update();
+  };
+  row.append(img,name,btn);
+  $("photoList").appendChild(row);
+ });
+}
+function rotateSelected(deg){
+ if(selected<0)return;
+ snapshot();
+ photos[selected].rotation=(photos[selected].rotation+deg+360)%360;
+ update();
+}
+function setZoom(v){
+ $("zoomValue").textContent=v+"%";
+ if(selected<0)return;
+ photos[selected].zoom=+v/100;
+ update();
+}
+function moveSelected(d){
+ if(selected<0)return;
+ const j=selected+d;
+ if(j<0||j>=photos.length)return;
+ snapshot();
+ [photos[selected],photos[j]]=[photos[j],photos[selected]];
+ selected=j;update();
+}
+function duplicateSelected(){
+ if(selected<0)return;
+ snapshot();
+ const p=photos[selected];
+ photos.splice(selected+1,0,{...p,id:nextId++});
+ selected++;update();
+}
+function deleteSelected(){
+ if(selected<0)return;
+ snapshot();
+ photos.splice(selected,1);
+ selected=photos.length?Math.min(selected,photos.length-1):-1;
+ update();
+}
+function layoutInfo(){
+ const [pw,ph]=paperSize();
+ const [fw,fh]=photoDimensions();
+ const margin=+$("margin").value;
+ const gap=+$("gap").value;
+ if(![pw,ph,fw,fh,margin,gap].every(Number.isFinite)||
+ fw<=0||fh<=0||margin<0||gap<0)
+  throw Error("Dimensões inválidas.");
+ const cols=Math.floor((pw-2*margin+gap)/(fw+gap));
+ const rows=Math.floor((ph-2*margin+gap)/(fh+gap));
+ if(cols<1||rows<1)
+  throw Error("As fotos não cabem no papel com essas margens.");
+ return {pw,ph,fw,fh,margin,gap,cols,rows,capacity:cols*rows};
+}
+function totalCopies(){
+ if(!photos.length)return 0;
+ const copies=Math.max(1,Math.min(100,+$("copies").value||1));
+ if($("layoutMode").value==="single")return photos.length;
+ if($("layoutMode").value==="repeat")return copies;
+ return photos.length*copies;
+}
+function pageCount(){
+ if(!photos.length)return 1;
+ const layout=layoutInfo();
+ if($("layoutMode").value==="single")return photos.length;
+ return Math.ceil(totalCopies()/layout.capacity);
+}
+function photoForIndex(index){
+ if(!photos.length)return null;
+ const mode=$("layoutMode").value;
+ if(mode==="single")return photos[index]||null;
+ if(mode==="repeat")return photos[selected>=0?selected:0];
+ return photos[index%photos.length];
+}
+function drawPhoto(ctx,p,x,y,w,h,fit){
+ ctx.save();
+ ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+ ctx.translate(x+w/2,y+h/2);
+ ctx.rotate(p.rotation*Math.PI/180);
+ const swap=p.rotation%180!==0;
+ const iw=swap?p.img.height:p.img.width;
+ const ih=swap?p.img.width:p.img.height;
+ const scale=(fit==="cover"?
+  Math.max(w/iw,h/ih):Math.min(w/iw,h/ih))*p.zoom;
+ const dw=iw*scale,dh=ih*scale;
+ const rw=swap?dh:dw,rh=swap?dw:dh;
+ ctx.drawImage(p.img,-rw/2,-rh/2,rw,rh);
+ ctx.restore();
+}
+function drawMarks(ctx,x,y,w,h,pxPerMM){
+ const len=3*pxPerMM;
+ const offset=1*pxPerMM;
+ ctx.save();ctx.strokeStyle="#777";ctx.lineWidth=Math.max(.5,pxPerMM*.15);
+ const corners=[
+  [x,y,-1,-1],[x+w,y,1,-1],
+  [x,y+h,-1,1],[x+w,y+h,1,1]
+ ];
+ corners.forEach(([cx,cy,sx,sy])=>{
+  ctx.beginPath();
+  ctx.moveTo(cx+sx*offset,cy);
+  ctx.lineTo(cx+sx*(offset+len),cy);
+  ctx.moveTo(cx,cy+sy*offset);
+  ctx.lineTo(cx,cy+sy*(offset+len));
+  ctx.stroke();
+ });
+ ctx.restore();
+}
+function drawPage(target,page,dpi){
+ const l=layoutInfo();
+ const W=mmToPx(l.pw,dpi),H=mmToPx(l.ph,dpi);
+ if(W*H>45000000)throw Error(
+  "Página muito grande para este dispositivo. Reduza o DPI.");
+ target.width=W;target.height=H;
+ const c=target.getContext("2d");
+ if(!c)throw Error("Canvas indisponível.");
+ c.fillStyle="#fff";c.fillRect(0,0,W,H);
+ if(!photos.length)return;
+ const k=dpi/MM_PER_INCH;
+ const single=$("layoutMode").value==="single";
+ const capacity=single?1:l.capacity;
+ const count=totalCopies();
+ const start=page*capacity;
+ const end=Math.min(start+capacity,count);
+ for(let index=start;index<end;index++){
+  const p=photoForIndex(index);
+  if(!p)continue;
+  const slot=index-start;
+  const col=single?0:slot%l.cols;
+  const row=single?0:Math.floor(slot/l.cols);
+  let x=(l.margin+col*(l.fw+l.gap))*k;
+  const y=(l.margin+row*(l.fh+l.gap))*k;
+  const w=l.fw*k,h=l.fh*k;
+  if($("side").value==="back")x=W-x-w;
+  drawPhoto(c,p,x,y,w,h,$("fit").value);
+  if($("cropMarks").checked)drawMarks(c,x,y,w,h,k);
+ }
+}
+function update(){
+ $("customFields").hidden=$("photoSize").value!=="custom";
+ renderPhotos();
+ try{
+  const pages=pageCount();
+  currentPage=Math.max(0,Math.min(currentPage,pages-1));
+  const [w,h]=paperSize();
+  const previewDPI=96;
+  drawPage(canvas,currentPage,previewDPI);
+  $("pageInfo").textContent=
+   "Página "+(currentPage+1)+" de "+pages+
+   " • "+w+" × "+h+" mm • exportação "+$("dpi").value+" DPI";
+  $("summary").textContent=photos.length+" fotos • "+
+   totalCopies()+" posições • "+pages+" página(s)";
+ }catch(e){
+  canvas.width=794;canvas.height=1123;
+  ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
+  msg(e.message);
+ }
+}
+function changePage(d){
+ currentPage+=d;update();
+}
+function download(blob,name){
+ if(!blob)throw Error("Arquivo vazio.");
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download=name;
+ document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+async function exportImage(){
+ if(!photos.length)return msg("Importe fotos primeiro.");
+ try{
+  const temp=document.createElement("canvas");
+  drawPage(temp,currentPage,+$("dpi").value);
+  const type=$("exportFormat").value;
+  const blob=await new Promise(resolve=>temp.toBlob(resolve,type,.95));
+  if(!blob)throw Error("Falha ao gerar imagem.");
+  download(blob,"estudio-pro-impressao-pagina-"+(currentPage+1)+
+   (type==="image/png"?".png":".jpg"));
+  msg("Página exportada.");
+ }catch(e){msg(e.message)}
+}
+async function getPDFLib(){
+ if(pdfLib)return pdfLib;
+ const mod=await import("https://cdn.jsdelivr.net/npm/jspdf@2.5.2/+esm");
+ pdfLib=mod.jsPDF;
+ return pdfLib;
+}
+async function buildPDF(){
+ if(!photos.length)throw Error("Importe fotos primeiro.");
+ const jsPDF=await getPDFLib();
+ const [pw,ph]=paperSize();
+ const pdf=new jsPDF({
+  orientation:pw>ph?"landscape":"portrait",
+  unit:"mm",format:[pw,ph],compress:true
+ });
+ const count=pageCount();
+ for(let i=0;i<count;i++){
+  if(i)pdf.addPage([pw,ph],pw>ph?"landscape":"portrait");
+  const temp=document.createElement("canvas");
+  drawPage(temp,i,+$("dpi").value);
+  const data=temp.toDataURL("image/jpeg",.93);
+  pdf.addImage(data,"JPEG",0,0,pw,ph,undefined,"FAST");
+  msg("Preparando PDF: página "+(i+1)+" de "+count);
+  await new Promise(r=>setTimeout(r,0));
+ }
+ return pdf;
+}
+async function exportPDF(){
+ if(busy)return;
+ busy=true;
+ try{
+  const pdf=await buildPDF();
+  pdf.save("estudio-pro-impressao.pdf");
+  msg("PDF completo gerado.");
+ }catch(e){msg("Falha no PDF: "+e.message)}
+ finally{busy=false}
+}
+async function printPage(){
+ if(busy)return;
+ busy=true;
+ try{
+  if(!photos.length)throw Error("Importe fotos primeiro.");
+  const pdf=await buildPDF();
+  const blob=pdf.output("blob");
+  const url=URL.createObjectURL(blob);
+  const win=window.open(url,"_blank");
+  if(!win){
+   download(blob,"estudio-pro-para-imprimir.pdf");
+   msg("O navegador bloqueou a nova aba. PDF baixado.");
+  }else{
+   msg("PDF aberto. Use Ctrl+P ou a opção Imprimir do visualizador.");
+  }
+  setTimeout(()=>URL.revokeObjectURL(url),120000);
+ }catch(e){msg("Falha: "+e.message)}
+ finally{busy=false}
+}
+function saveProject(){
+ try{
+  const blob=new Blob([JSON.stringify({version:1,...state()})],
+   {type:"application/json"});
+  download(blob,"estudio-pro-impressao.json");
+  msg("Projeto salvo com as imagens incorporadas.");
+ }catch(e){msg(e.message)}
+}
+function openProject(){
+ $("projectInput").value="";
+ $("projectInput").click();
+}
+$("projectInput").onchange=async e=>{
+ try{
+  const f=e.target.files[0];if(!f)return;
+  const data=JSON.parse(await f.text());
+  if(!Array.isArray(data.photos)||!data.settings)
+   throw Error("Projeto inválido.");
+  snapshot();await restore(data);
+  msg("Projeto restaurado.");
+ }catch(err){msg("Falha ao abrir: "+err.message)}
+};
+function newProject(){
+ if(!confirm("Criar novo projeto? Alterações não salvas serão perdidas."))return;
+ snapshot();photos=[];selected=-1;currentPage=0;
+ update();msg("Novo projeto criado.");
+}
+update();
+</script>
+</body>
+</html>
