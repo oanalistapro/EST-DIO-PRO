@@ -1,0 +1,528 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e1b">
+<title>ESTÚDIO PRO — Design PRO</title>
+<style>
+:root{color-scheme:dark;--bg:#080e1b;--panel:#121e32;--card:#1b2c47;--line:#304663;--blue:#388bff;--muted:#a9bad3;--green:#07866b}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:#f5f8ff;font-family:Arial,system-ui,sans-serif}
+button,input,select,textarea{font:inherit}
+button{background:var(--card);color:white;border:1px solid var(--line);border-radius:9px;padding:10px;cursor:pointer}
+button:hover{filter:brightness(1.14)}
+button:disabled{opacity:.45}
+input[type=text],input[type=number],select,textarea{background:#0b1628;color:white;border:1px solid var(--line);border-radius:8px;padding:9px;width:100%}
+input[type=range]{width:100%;accent-color:var(--blue)}
+input[type=color]{width:100%;height:39px;border:0;background:transparent}
+input[type=file]{display:none}
+a{color:#b5d5ff}
+.primary{background:var(--blue);border-color:var(--blue);font-weight:bold}
+.success{background:var(--green)}
+.danger{background:#75323e}
+.full{width:100%}
+header{padding:14px 2%;display:flex;justify-content:space-between;align-items:center;gap:10px;background:#101b2d;border-bottom:1px solid var(--line)}
+.logo{font-size:21px;font-weight:900}.logo span{color:var(--blue)}
+main{max-width:1800px;margin:auto;padding:12px}
+.toolbar{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr) 250px;gap:11px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:13px;min-width:0}
+h2{font-size:17px;margin:0 0 12px}h3{font-size:14px;margin:17px 0 9px}
+.muted{color:var(--muted);font-size:12px;line-height:1.5}
+.stack{display:grid;gap:8px}.two{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.control{margin:12px 0}.control label{display:flex;justify-content:space-between;gap:8px;font-size:12px;margin-bottom:6px}
+.stage{background:#070c15;min-height:470px;border-radius:11px;display:flex;align-items:center;justify-content:center;overflow:auto;padding:18px}
+#canvas{display:block;max-width:100%;max-height:70vh;width:auto;height:auto;box-shadow:0 8px 35px #0009;touch-action:none;cursor:default}
+.layer{display:flex;align-items:center;gap:5px;border:1px solid var(--line);padding:7px;border-radius:8px;margin:6px 0}
+.layer.active{border-color:var(--blue);background:#21416b}
+.layer .name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;cursor:pointer}
+.layer button{padding:5px;font-size:11px}
+.status{background:#123647;border:1px solid #2b5b70;color:#c4f4e9;border-radius:9px;padding:11px;margin-top:11px;font-size:12px;overflow-wrap:anywhere}
+.note{background:#1b2b43;border-radius:9px;padding:11px;color:var(--muted);font-size:12px;line-height:1.5}
+@media(max-width:1100px){.layout{grid-template-columns:250px minmax(0,1fr)}.right{grid-column:1/-1}}
+@media(max-width:720px){.layout{grid-template-columns:1fr}.right{grid-column:auto}.stage{min-height:300px}header .logo{font-size:17px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo">✦ ESTÚDIO <span>PRO</span> / DESIGN</div>
+ <a href="../index.html">← Início</a>
+</header>
+<main>
+<div class="toolbar">
+ <button class="primary" onclick="newProject()">＋ Novo</button>
+ <button onclick="importImage()">🖼️ Imagem</button>
+ <button onclick="undo()">↶ Desfazer</button>
+ <button onclick="redo()">↷ Refazer</button>
+ <button onclick="saveProject()">💾 Salvar projeto</button>
+ <button onclick="openProject()">📂 Abrir projeto</button>
+ <button class="success" onclick="exportDesign()">⬇ Exportar</button>
+</div>
+<div class="layout">
+<aside class="panel">
+ <h2>Ferramentas de design</h2>
+ <h3>Modelos e formatos</h3>
+ <select id="formatSize">
+  <option value="1080x1080">Post quadrado 1080×1080</option>
+  <option value="1080x1920">Story 1080×1920</option>
+  <option value="1920x1080">YouTube / Horizontal</option>
+  <option value="1280x720">Thumbnail 1280×720</option>
+  <option value="2480x3508">A4 300 DPI</option>
+  <option value="3840x2160">4K horizontal</option>
+  <option value="7680x4320">8K horizontal</option>
+ </select>
+ <button class="full" style="margin-top:8px" onclick="changeFormat()">Aplicar formato</button>
+ <h3>Modelos rápidos</h3>
+ <div class="two">
+  <button onclick="template('promo')">Promoção</button>
+  <button onclick="template('event')">Evento</button>
+  <button onclick="template('youtube')">YouTube</button>
+  <button onclick="template('card')">Cartão</button>
+ </div>
+ <h3>Texto PRO</h3>
+ <input id="textInput" type="text" placeholder="Digite seu texto">
+ <div class="control"><label>Tamanho</label><input id="textSize" type="number" min="8" max="500" value="65"></div>
+ <div class="control"><label>Fonte</label>
+  <select id="fontFamily">
+   <option value="Arial">Arial</option>
+   <option value="Georgia">Georgia</option>
+   <option value="Verdana">Verdana</option>
+   <option value="Tahoma">Tahoma</option>
+   <option value="Impact">Impact</option>
+   <option value="monospace">Monospace</option>
+  </select>
+ </div>
+ <div class="control"><label>Cor</label><input id="textColor" type="color" value="#ffffff"></div>
+ <button class="primary full" onclick="addText()">＋ Adicionar texto</button>
+ <h3>Formas e elementos</h3>
+ <div class="two">
+  <button onclick="addShape('rect')">▭ Retângulo</button>
+  <button onclick="addShape('circle')">◯ Círculo</button>
+  <button onclick="addShape('triangle')">△ Triângulo</button>
+  <button onclick="addShape('line')">╱ Linha</button>
+  <button onclick="addShape('star')">☆ Estrela</button>
+  <button onclick="addShape('round')">▢ Arredondado</button>
+ </div>
+ <h3>Plano de fundo</h3>
+ <div class="control"><label>Cor principal</label><input id="bgColor" type="color" value="#18345e"></div>
+ <div class="control"><label>Segunda cor</label><input id="bgColor2" type="color" value="#07101f"></div>
+ <div class="two">
+  <button onclick="setBackground(false)">Cor sólida</button>
+  <button onclick="setBackground(true)">Gradiente</button>
+ </div>
+ <h3>Exportação</h3>
+ <select id="exportFormat">
+  <option value="image/png">PNG</option>
+  <option value="image/jpeg">JPG</option>
+  <option value="image/webp">WEBP</option>
+ </select>
+ <button class="success full" style="margin-top:8px" onclick="exportDesign()">Baixar imagem</button>
+</aside>
+
+<section class="panel">
+ <div class="stage">
+  <canvas id="canvas" width="1080" height="1080"></canvas>
+ </div>
+ <div class="status" id="status" role="status" aria-live="polite">Design PRO iniciado. Crie seu projeto.</div>
+ <p class="muted" id="dimensions">1080 × 1080 pixels</p>
+</section>
+
+<aside class="panel right">
+ <h2>Camadas</h2>
+ <div id="layers"></div>
+ <div class="two">
+  <button onclick="moveLayer(1)">↑ Subir</button>
+  <button onclick="moveLayer(-1)">↓ Descer</button>
+  <button onclick="duplicateLayer()">Duplicar</button>
+  <button class="danger" onclick="deleteLayer()">Excluir</button>
+ </div>
+ <h3>Propriedades</h3>
+ <div id="noSelection" class="muted">Selecione uma camada para editar.</div>
+ <div id="properties" hidden>
+  <div class="control"><label>Posição X</label><input id="propX" type="number"></div>
+  <div class="control"><label>Posição Y</label><input id="propY" type="number"></div>
+  <div class="control"><label>Largura</label><input id="propW" type="number" min="1"></div>
+  <div class="control"><label>Altura</label><input id="propH" type="number" min="1"></div>
+  <div class="control"><label>Rotação (graus)</label><input id="propRotation" type="number"></div>
+  <div class="control"><label>Opacidade <span id="opacityLabel">100%</span></label><input id="propOpacity" type="range" min="0" max="100" value="100"></div>
+  <div class="control"><label>Cor</label><input id="propColor" type="color" value="#ffffff"></div>
+  <div class="control"><label>Texto da camada</label><input id="propText" type="text"></div>
+  <div class="two">
+   <button onclick="alignLayer('center')">Centralizar X</button>
+   <button onclick="alignLayer('middle')">Centralizar Y</button>
+  </div>
+  <button class="primary full" style="margin-top:8px" onclick="applyProperties()">Aplicar alterações</button>
+ </div>
+ <h3>Informações</h3>
+ <div class="note">Arraste elementos diretamente na tela. Os projetos podem ser salvos em JSON, incluindo imagens incorporadas.</div>
+</aside>
+</div>
+<input id="imageInput" type="file" accept="image/*" multiple>
+<input id="projectInput" type="file" accept=".json,application/json">
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const canvas=$("canvas"),ctx=canvas.getContext("2d");
+let W=1080,H=1080,items=[],selected=null,nextId=1;
+let background={type:"gradient",a:"#18345e",b:"#07101f"};
+let history=[],future=[],dragging=false,dragStart=null;
+const imageCache=new Map();
+function msg(t){$("status").textContent=t}
+function clone(v){return JSON.parse(JSON.stringify(v))}
+function state(){return {W,H,items:clone(items),background:clone(background)}}
+function snapshot(){
+ history.push(state());if(history.length>35)history.shift();future=[];
+}
+function restore(s){
+ W=s.W;H=s.H;items=clone(s.items);background=clone(s.background);
+ selected=null;render();
+}
+function undo(){
+ if(!history.length)return msg("Nada para desfazer.");
+ future.push(state());restore(history.pop());msg("Desfeito.");
+}
+function redo(){
+ if(!future.length)return msg("Nada para refazer.");
+ history.push(state());restore(future.pop());msg("Refeito.");
+}
+function createItem(type,extra={}){
+ snapshot();
+ const o={id:nextId++,type,x:W/2,y:H/2,w:300,h:140,
+ rotation:0,opacity:1,color:"#ffffff",visible:true,
+ locked:false,...extra};
+ items.push(o);selected=o.id;render();return o;
+}
+function addText(){
+ const text=$("textInput").value.trim();
+ if(!text)return msg("Digite um texto.");
+ const size=Math.max(8,Math.min(500,+$("textSize").value||65));
+ createItem("text",{
+  text,size,font:$("fontFamily").value,
+  color:$("textColor").value,
+  w:Math.min(W*.85,text.length*size*.65+30),h:size*1.5
+ });
+ msg("Texto adicionado.");
+}
+function addShape(type){
+ createItem(type,{color:$("textColor").value});
+ msg("Forma adicionada.");
+}
+function importImage(){
+ $("imageInput").value="";$("imageInput").click();
+}
+$("imageInput").onchange=async e=>{
+ for(const file of e.target.files){
+  if(!file.type.startsWith("image/"))continue;
+  const data=await new Promise((resolve,reject)=>{
+   const reader=new FileReader();
+   reader.onload=()=>resolve(reader.result);
+   reader.onerror=()=>reject(Error("Falha na leitura."));
+   reader.readAsDataURL(file);
+  });
+  const im=await loadImage(data);
+  const scale=Math.min(W*.7/im.width,H*.7/im.height,1);
+  createItem("image",{
+   src:data,w:im.width*scale,h:im.height*scale
+  });
+ }
+ msg("Imagem importada.");
+};
+function loadImage(src){
+ if(imageCache.has(src))return imageCache.get(src);
+ const p=new Promise((resolve,reject)=>{
+  const img=new Image();
+  img.onload=()=>resolve(img);
+  img.onerror=()=>reject(Error("Imagem inválida."));
+  img.src=src;
+ });
+ imageCache.set(src,p);return p;
+}
+function setBackground(gradient){
+ snapshot();
+ background={
+  type:gradient?"gradient":"solid",
+  a:$("bgColor").value,b:$("bgColor2").value
+ };
+ render();
+}
+function changeFormat(){
+ const [w,h]=$("formatSize").value.split("x").map(Number);
+ if(w*h>40000000&&!confirm(
+  "Esta resolução pode exigir muita memória. Continuar?"))return;
+ snapshot();W=w;H=h;render();
+}
+function template(type){
+ if(items.length&&!confirm("Substituir o design atual pelo modelo?"))return;
+ snapshot();items=[];selected=null;
+ W=1080;H=1080;
+ const configs={
+  promo:{a:"#08284d",b:"#1568c7",title:"OFERTA ESPECIAL",sub:"APROVEITE AGORA"},
+  event:{a:"#240d4e",b:"#a02d87",title:"GRANDE EVENTO",sub:"VOCÊ É NOSSO CONVIDADO"},
+  youtube:{a:"#111827",b:"#a32338",title:"NOVO VÍDEO",sub:"ASSISTA AGORA"},
+  card:{a:"#063d38",b:"#12a68c",title:"SEU NEGÓCIO",sub:"QUALIDADE E CONFIANÇA"}
+ };
+ const c=configs[type];background={type:"gradient",a:c.a,b:c.b};
+ items.push({id:nextId++,type:"text",x:540,y:420,w:950,h:130,
+ rotation:0,opacity:1,color:"#ffffff",visible:true,locked:false,
+ text:c.title,size:90,font:"Impact"});
+ items.push({id:nextId++,type:"text",x:540,y:600,w:900,h:85,
+ rotation:0,opacity:1,color:"#ffffff",visible:true,locked:false,
+ text:c.sub,size:45,font:"Arial"});
+ render();msg("Modelo carregado.");
+}
+function drawBackground(){
+ if(background.type==="gradient"){
+  const g=ctx.createLinearGradient(0,0,W,H);
+  g.addColorStop(0,background.a);g.addColorStop(1,background.b);
+  ctx.fillStyle=g;
+ }else ctx.fillStyle=background.a;
+ ctx.fillRect(0,0,W,H);
+}
+function drawStar(x,y,outer,inner,points=5){
+ ctx.beginPath();
+ for(let i=0;i<points*2;i++){
+  const r=i%2===0?outer:inner;
+  const a=-Math.PI/2+i*Math.PI/points;
+  const px=x+Math.cos(a)*r,py=y+Math.sin(a)*r;
+  if(i===0)ctx.moveTo(px,py);else ctx.lineTo(px,py);
+ }
+ ctx.closePath();ctx.fill();
+}
+function drawItem(o){
+ if(!o.visible)return;
+ ctx.save();ctx.translate(o.x,o.y);
+ ctx.rotate(o.rotation*Math.PI/180);
+ ctx.globalAlpha=o.opacity;
+ ctx.fillStyle=o.color;
+ const w=o.w,h=o.h;
+ if(o.type==="text"){
+  ctx.textAlign="center";ctx.textBaseline="middle";
+  ctx.font=`bold ${o.size}px ${o.font||"Arial"}`;
+  ctx.fillText(o.text||"",0,0,w);
+ }else if(o.type==="rect"){
+  ctx.fillRect(-w/2,-h/2,w,h);
+ }else if(o.type==="round"){
+  ctx.beginPath();ctx.roundRect(-w/2,-h/2,w,h,Math.min(35,w/5,h/5));ctx.fill();
+ }else if(o.type==="circle"){
+  ctx.beginPath();ctx.ellipse(0,0,w/2,h/2,0,0,Math.PI*2);ctx.fill();
+ }else if(o.type==="triangle"){
+  ctx.beginPath();ctx.moveTo(0,-h/2);
+  ctx.lineTo(w/2,h/2);ctx.lineTo(-w/2,h/2);ctx.closePath();ctx.fill();
+ }else if(o.type==="line"){
+  ctx.strokeStyle=o.color;ctx.lineWidth=Math.max(3,h/15);
+  ctx.beginPath();ctx.moveTo(-w/2,-h/2);ctx.lineTo(w/2,h/2);ctx.stroke();
+ }else if(o.type==="star"){
+  drawStar(0,0,Math.min(w,h)/2,Math.min(w,h)/4);
+ }else if(o.type==="image"){
+  const cached=imageCache.get(o.src);
+  if(cached)cached.then(im=>{
+   if(!o._loaded){o._loaded=true;render()}
+  }).catch(()=>{});
+  const im=loadedImages.get(o.src);
+  if(im)ctx.drawImage(im,-w/2,-h/2,w,h);
+ }
+ ctx.restore();
+}
+const loadedImages=new Map();
+async function prepareImages(){
+ for(const o of items){
+  if(o.type==="image"&&!loadedImages.has(o.src)){
+   try{loadedImages.set(o.src,await loadImage(o.src))}
+   catch(e){msg("Uma imagem não pôde ser carregada.")}
+  }
+ }
+}
+let rendering=false;
+async function render(){
+ if(rendering)return;
+ rendering=true;
+ await prepareImages();
+ canvas.width=W;canvas.height=H;
+ drawBackground();
+ items.forEach(drawItem);
+ if(selected!==null){
+  const o=items.find(x=>x.id===selected);
+  if(o){
+   ctx.save();ctx.translate(o.x,o.y);
+   ctx.rotate(o.rotation*Math.PI/180);
+   ctx.strokeStyle="#49a2ff";ctx.lineWidth=Math.max(2,W/600);
+   ctx.setLineDash([10,7]);
+   ctx.strokeRect(-o.w/2,-o.h/2,o.w,o.h);
+   ctx.restore();
+  }
+ }
+ $("dimensions").textContent=W+" × "+H+" pixels";
+ renderLayers();renderProperties();
+ rendering=false;
+}
+function renderLayers(){
+ $("layers").replaceChildren();
+ [...items].reverse().forEach(o=>{
+  const row=document.createElement("div");
+  row.className="layer"+(selected===o.id?" active":"");
+  const name=document.createElement("span");
+  name.className="name";
+  name.textContent=(o.type==="text"?"T ":"◆ ")+(o.text||o.type);
+  name.onclick=()=>{selected=o.id;render()};
+  const eye=document.createElement("button");
+  eye.textContent=o.visible?"👁":"🚫";
+  eye.onclick=()=>{snapshot();o.visible=!o.visible;render()};
+  const lock=document.createElement("button");
+  lock.textContent=o.locked?"🔒":"🔓";
+  lock.onclick=()=>{snapshot();o.locked=!o.locked;render()};
+  row.append(name,eye,lock);$("layers").appendChild(row);
+ });
+}
+function renderProperties(){
+ const o=items.find(x=>x.id===selected);
+ $("properties").hidden=!o;$("noSelection").hidden=!!o;
+ if(!o)return;
+ $("propX").value=Math.round(o.x);
+ $("propY").value=Math.round(o.y);
+ $("propW").value=Math.round(o.w);
+ $("propH").value=Math.round(o.h);
+ $("propRotation").value=o.rotation;
+ $("propOpacity").value=Math.round(o.opacity*100);
+ $("opacityLabel").textContent=Math.round(o.opacity*100)+"%";
+ $("propColor").value=o.color;
+ $("propText").value=o.text||"";
+ $("propText").disabled=o.type!=="text";
+}
+$("propOpacity").oninput=e=>
+ $("opacityLabel").textContent=e.target.value+"%";
+function applyProperties(){
+ const o=items.find(x=>x.id===selected);
+ if(!o)return;
+ if(o.locked)return msg("Camada bloqueada.");
+ const x=+$("propX").value,y=+$("propY").value;
+ const w=+$("propW").value,h=+$("propH").value;
+ const rot=+$("propRotation").value;
+ if(![x,y,w,h,rot].every(Number.isFinite)||w<1||h<1)
+  return msg("Valores inválidos.");
+ snapshot();
+ Object.assign(o,{x,y,w,h,rotation:rot,
+  opacity:+$("propOpacity").value/100,
+  color:$("propColor").value});
+ if(o.type==="text")o.text=$("propText").value;
+ render();msg("Propriedades aplicadas.");
+}
+function selectedItem(){return items.find(x=>x.id===selected)}
+function deleteLayer(){
+ const o=selectedItem();if(!o||o.locked)return;
+ snapshot();items=items.filter(x=>x.id!==selected);
+ selected=null;render();
+}
+function duplicateLayer(){
+ const o=selectedItem();if(!o)return;
+ snapshot();
+ const n={...o,id:nextId++,x:o.x+35,y:o.y+35};
+ items.push(n);selected=n.id;render();
+}
+function moveLayer(direction){
+ const i=items.findIndex(x=>x.id===selected);
+ if(i<0)return;
+ const j=i+direction;
+ if(j<0||j>=items.length)return;
+ snapshot();[items[i],items[j]]=[items[j],items[i]];
+ render();
+}
+function alignLayer(axis){
+ const o=selectedItem();if(!o||o.locked)return;
+ snapshot();
+ if(axis==="center")o.x=W/2;else o.y=H/2;
+ render();
+}
+function point(e){
+ const r=canvas.getBoundingClientRect();
+ return {x:(e.clientX-r.left)*W/r.width,
+ y:(e.clientY-r.top)*H/r.height};
+}
+function hit(o,p){
+ if(!o.visible)return false;
+ const rad=-o.rotation*Math.PI/180;
+ const dx=p.x-o.x,dy=p.y-o.y;
+ const x=dx*Math.cos(rad)-dy*Math.sin(rad);
+ const y=dx*Math.sin(rad)+dy*Math.cos(rad);
+ return Math.abs(x)<=o.w/2&&Math.abs(y)<=o.h/2;
+}
+canvas.addEventListener("pointerdown",e=>{
+ const p=point(e);
+ const o=[...items].reverse().find(o=>hit(o,p));
+ if(!o){selected=null;render();return}
+ selected=o.id;
+ if(!o.locked){
+  snapshot();dragging=true;
+  dragStart={x:p.x,y:p.y,ox:o.x,oy:o.y};
+  canvas.setPointerCapture(e.pointerId);
+ }
+ render();
+});
+canvas.addEventListener("pointermove",e=>{
+ if(!dragging)return;
+ const o=selectedItem();if(!o)return;
+ const p=point(e);
+ o.x=dragStart.ox+p.x-dragStart.x;
+ o.y=dragStart.oy+p.y-dragStart.y;
+ render();
+});
+canvas.addEventListener("pointerup",()=>dragging=false);
+canvas.addEventListener("pointercancel",()=>dragging=false);
+function newProject(){
+ if(!confirm("Criar novo design? Alterações não salvas serão perdidas."))return;
+ snapshot();items=[];selected=null;
+ W=1080;H=1080;
+ background={type:"gradient",a:"#18345e",b:"#07101f"};
+ render();msg("Novo projeto criado.");
+}
+function download(blob,name){
+ if(!blob)return msg("Falha ao gerar arquivo.");
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement("a");
+ a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+ setTimeout(()=>URL.revokeObjectURL(url),60000);
+}
+function saveProject(){
+ const data={version:1,...state()};
+ const blob=new Blob([JSON.stringify(data)],
+  {type:"application/json"});
+ download(blob,"estudio-pro-design.json");
+ msg("Projeto JSON salvo.");
+}
+function openProject(){
+ $("projectInput").value="";$("projectInput").click();
+}
+$("projectInput").onchange=async e=>{
+ try{
+  const f=e.target.files[0];if(!f)return;
+  const data=JSON.parse(await f.text());
+  if(!Array.isArray(data.items)||!Number.isInteger(data.W)||
+   !Number.isInteger(data.H)||data.W<1||data.H<1||
+   data.W*data.H>40000000)throw Error("Projeto inválido.");
+  snapshot();restore(data);msg("Projeto aberto.");
+ }catch(e){msg(e.message)}
+};
+async function exportDesign(){
+ try{
+  await prepareImages();
+  const c=document.createElement("canvas");
+  c.width=W;c.height=H;
+  if(c.width!==W||c.height!==H)throw Error("Resolução não suportada.");
+  const old=canvas;
+  selected=null;
+  await render();
+  const type=$("exportFormat").value;
+  const blob=await new Promise(resolve=>canvas.toBlob(resolve,type,.95));
+  if(!blob)throw Error("Exportação falhou.");
+  download(blob,"estudio-pro-design."+
+   (type==="image/jpeg"?"jpg":type.split("/")[1]));
+  msg("Design exportado em "+W+" × "+H+".");
+ }catch(e){msg(e.message)}
+}
+render();
+</script>
+</body>
+</html>
